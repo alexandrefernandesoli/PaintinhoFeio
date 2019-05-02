@@ -18,9 +18,9 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import javafx.event.EventHandler;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
 
 /**
@@ -35,20 +35,29 @@ public class FXMLDocumentController {
     private ColorPicker selecionaCor;
 
     @FXML
-    private TextField tamanhoPincel;
-
-    @FXML
     private ChoiceBox selecionaFerramenta;
+    
+    @FXML
+    private Slider slider;
 
     public void initialize() {
         selecionaFerramenta.getItems().addAll("Caneta", "Borracha", "Balde", "Quadrado");
         selecionaFerramenta.getSelectionModel().selectFirst();
         selecionaCor.setValue(Color.BLACK);
+        slider.setShowTickLabels(true);
 
         GraphicsContext areaDePintura = tela.getGraphicsContext2D();
 
-        selecionaFerramenta.setOnMouseClicked(e -> {
+        selecionaFerramenta.setOnAction((ActionEvent) -> {
             System.out.println(selecionaFerramenta.getValue());
+        });
+        
+        selecionaCor.setOnAction((ActionEvent) ->{
+           areaDePintura.setStroke(selecionaCor.getValue());
+        });
+        
+        slider.setOnMouseDragged((ActionEvent) ->{
+            System.out.println((int) slider.getValue());
         });
 
         tela.addEventHandler(MouseEvent.MOUSE_PRESSED,
@@ -56,12 +65,11 @@ public class FXMLDocumentController {
             @Override
             public void handle(MouseEvent event) {
                 if (selecionaFerramenta.getValue().equals("Caneta")) {
-                    double size = Double.parseDouble(tamanhoPincel.getText());
+                    double size = slider.getValue();
                     areaDePintura.beginPath();
                     areaDePintura.moveTo(event.getX(), event.getY());
                     areaDePintura.setLineCap(StrokeLineCap.ROUND);
                     areaDePintura.setLineWidth(size);
-                    areaDePintura.setStroke(selecionaCor.getValue());
                     areaDePintura.stroke();
                 }
             }
@@ -79,7 +87,7 @@ public class FXMLDocumentController {
                     areaDePintura.moveTo(event.getX(), event.getY());
                 }
                 if (selecionaFerramenta.getValue().equals("Borracha")) {
-                    double size = Double.parseDouble(tamanhoPincel.getText());
+                    double size = slider.getValue();
                     areaDePintura.clearRect(event.getX() - size / 2, event.getY() - size / 2, size, size);
                 }
             }
