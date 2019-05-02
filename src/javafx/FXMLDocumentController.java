@@ -5,7 +5,6 @@ package javafx;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
@@ -17,8 +16,12 @@ import javafx.scene.image.Image;
 
 import javax.imageio.ImageIO;
 import java.io.File;
+import javafx.event.EventHandler;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeLineCap;
 
 /**
  * @author Almas Baimagambetov (almaslvl@gmail.com)
@@ -33,52 +36,64 @@ public class FXMLDocumentController {
 
     @FXML
     private TextField tamanhoPincel;
-    
+
     @FXML
     private ChoiceBox selecionaFerramenta;
 
     public void initialize() {
-        selecionaFerramenta.getItems().addAll("Caneta", "Borracha", "Balde", "Circulo");
+        selecionaFerramenta.getItems().addAll("Caneta", "Borracha", "Balde", "Quadrado");
         selecionaFerramenta.getSelectionModel().selectFirst();
         selecionaCor.setValue(Color.BLACK);
-        
-        
-        
+
         GraphicsContext areaDePintura = tela.getGraphicsContext2D();
-        /*
-        areaDePintura.setFill(Color.GREEN);
-        areaDePintura.setStroke(Color.BLUE);
-        areaDePintura.setLineWidth(5);
-        areaDePintura.strokeLine(40, 10, 10, 40);
-        areaDePintura.fillOval(10, 60, 30, 30);
-        areaDePintura.strokeOval(60, 60, 30, 30);
-        */
-        selecionaFerramenta.setOnMouseClicked(e ->{
+
+        selecionaFerramenta.setOnMouseClicked(e -> {
             System.out.println(selecionaFerramenta.getValue());
         });
-        
-        tela.setOnMouseClicked(e ->{
-            if(selecionaFerramenta.getValue().equals("Balde")){
-                areaDePintura.setFill(selecionaCor.getValue());
-                areaDePintura.fillRect(0, 0, tela.getWidth(), tela.getHeight());
-            }else if(selecionaFerramenta.getValue().equals("Caneta")){
-                double size = Double.parseDouble(tamanhoPincel.getText());
-                double x = e.getX() - size / 2;
-                double y = e.getY() - size / 2;
-                areaDePintura.setFill(selecionaCor.getValue());
-                areaDePintura.fillOval(x, y, size, size);
+
+        tela.addEventHandler(MouseEvent.MOUSE_PRESSED,
+                new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (selecionaFerramenta.getValue().equals("Caneta")) {
+                    double size = Double.parseDouble(tamanhoPincel.getText());
+                    areaDePintura.beginPath();
+                    areaDePintura.moveTo(event.getX(), event.getY());
+                    areaDePintura.setLineCap(StrokeLineCap.ROUND);
+                    areaDePintura.setLineWidth(size);
+                    areaDePintura.setStroke(selecionaCor.getValue());
+                    areaDePintura.stroke();
+                }
             }
         });
-        tela.setOnMouseDragged(e -> {
-            double size = Double.parseDouble(tamanhoPincel.getText());
-            double x = e.getX() - size / 2;
-            double y = e.getY() - size / 2;
 
-            if (selecionaFerramenta.getValue().equals("Borracha")) {
-                areaDePintura.clearRect(x, y, size, size);
-            } else {
-                areaDePintura.setFill(selecionaCor.getValue());
-                areaDePintura.fillOval(x, y, size, size);
+        tela.addEventHandler(MouseEvent.MOUSE_DRAGGED,
+                new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (selecionaFerramenta.getValue().equals("Caneta")) {
+                    areaDePintura.lineTo(event.getX(), event.getY());
+                    areaDePintura.stroke();
+                    areaDePintura.closePath();
+                    areaDePintura.beginPath();
+                    areaDePintura.moveTo(event.getX(), event.getY());
+                }
+                if (selecionaFerramenta.getValue().equals("Borracha")) {
+                    double size = Double.parseDouble(tamanhoPincel.getText());
+                    areaDePintura.clearRect(event.getX() - size / 2, event.getY() - size / 2, size, size);
+                }
+            }
+        });
+
+        tela.addEventHandler(MouseEvent.MOUSE_RELEASED,
+                new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (selecionaFerramenta.getValue().equals("Caneta")) {
+                    areaDePintura.lineTo(event.getX(), event.getY());
+                    areaDePintura.stroke();
+                    areaDePintura.closePath();
+                }
             }
         });
     }
