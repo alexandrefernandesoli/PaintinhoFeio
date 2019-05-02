@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author alexa
+ * @author
  */
 public class Main extends Application {
     
@@ -26,6 +26,7 @@ public class Main extends Application {
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
+        stage.setTitle("Paint Application");
         stage.show();
     }
 

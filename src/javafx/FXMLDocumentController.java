@@ -6,31 +6,74 @@ package javafx;
  * and open the template in the editor.
  */
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
+import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+
+import javax.imageio.ImageIO;
+import java.io.File;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.paint.Color;
 
 /**
- *
- * @author
+ * @author Almas Baimagambetov (almaslvl@gmail.com)
  */
-public class FXMLDocumentController implements Initializable {
+public class FXMLDocumentController {
 
     @FXML
-    private Label label;
+    private Canvas tela;
+
+    @FXML
+    private ColorPicker selecionaCor;
+
+    @FXML
+    private TextField tamanhoPincel;
     
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
+    private ChoiceBox selecionaFerramenta;
+
+    public void initialize() {
+        selecionaFerramenta.getItems().addAll("Caneta", "Borracha", "Quadrado");
+        selecionaFerramenta.getSelectionModel().selectFirst();
+        selecionaCor.setValue(Color.BLACK);
+        
+        GraphicsContext areaDePintura = tela.getGraphicsContext2D();
+        
+        selecionaFerramenta.setOnMouseClicked(e ->{
+            System.out.println(selecionaFerramenta.getValue());
+        });
+        
+        tela.setOnMouseDragged(e -> {
+            double size = Double.parseDouble(tamanhoPincel.getText());
+            double x = e.getX() - size / 2;
+            double y = e.getY() - size / 2;
+
+            if (selecionaFerramenta.getValue().equals("Borracha")) {
+                areaDePintura.clearRect(x, y, size, size);
+            } else {
+                areaDePintura.setFill(selecionaCor.getValue());
+                areaDePintura.fillRect(x, y, size, size);
+            }
+        });
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
+    public void onSave() {
+        try {
+            Image snapshot = tela.snapshot(null, null);
 
+            ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", new File("paint.png"));
+        } catch (Exception e) {
+            System.out.println("Failed to save image: " + e);
+        }
+    }
+
+    public void onExit() {
+        Platform.exit();
+    }
 }
