@@ -15,6 +15,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
 
 public class FXMLDocumentController {
@@ -36,6 +37,7 @@ public class FXMLDocumentController {
         selecionaFerramenta.getSelectionModel().selectFirst();
         selecionaCor.setValue(Color.BLACK);
         slider.setShowTickLabels(true);
+        Rectangle rect = new Rectangle();
 
         GraphicsContext areaDePintura = tela.getGraphicsContext2D();
 
@@ -62,6 +64,13 @@ public class FXMLDocumentController {
                     areaDePintura.setLineCap(StrokeLineCap.ROUND);
                     areaDePintura.setLineWidth(size);
                     areaDePintura.stroke();
+                }else if(selecionaFerramenta.getValue().equals("Quadrado")){
+                    double size = slider.getValue();
+                    areaDePintura.setLineWidth(size);
+                    rect.setTranslateX(event.getX());
+                    rect.setTranslateY(event.getY());
+                    rect.setX(event.getX());
+                    rect.setY(event.getY());
                 }
             }
         });
@@ -80,6 +89,9 @@ public class FXMLDocumentController {
                 if (selecionaFerramenta.getValue().equals("Borracha")) {
                     double size = slider.getValue();
                     areaDePintura.clearRect(event.getX() - size / 2, event.getY() - size / 2, size, size);
+                }else if(selecionaFerramenta.getValue().equals("Quadrado")){
+                    rect.setWidth(event.getX() - rect.getTranslateX());
+                    rect.setHeight(event.getY() - rect.getTranslateY());
                 }
             }
         });
@@ -92,6 +104,8 @@ public class FXMLDocumentController {
                     areaDePintura.lineTo(event.getX(), event.getY());
                     areaDePintura.stroke();
                     areaDePintura.closePath();
+                }else if(selecionaFerramenta.getValue().equals("Quadrado")){
+                    areaDePintura.strokeRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
                 }
             }
         });
