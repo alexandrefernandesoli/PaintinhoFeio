@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import javafx.event.EventHandler;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -31,12 +32,15 @@ public class FXMLDocumentController {
     
     @FXML
     private Slider slider;
+    
+    @FXML
+    private Label tamanhoLabel;
 
     public void initialize() {
         selecionaFerramenta.getItems().addAll("Caneta", "Borracha", "Balde", "Quadrado");
         selecionaFerramenta.getSelectionModel().selectFirst();
         selecionaCor.setValue(Color.BLACK);
-        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
         Rectangle rect = new Rectangle();
 
         GraphicsContext areaDePintura = tela.getGraphicsContext2D();
@@ -50,7 +54,9 @@ public class FXMLDocumentController {
         });
         
         slider.setOnMouseDragged((ActionEvent) ->{
-            System.out.println((int) slider.getValue());
+            String str = String.format("%.0f", slider.getValue());
+            tamanhoLabel.setText(str);
+            areaDePintura.setLineWidth(slider.getValue());
         });
 
         tela.addEventHandler(MouseEvent.MOUSE_PRESSED,
