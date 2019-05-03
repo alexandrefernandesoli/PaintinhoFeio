@@ -7,10 +7,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.image.Image;
-
 import javax.imageio.ImageIO;
 import java.io.File;
-import javafx.event.EventHandler;
+import java.io.IOException;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -53,66 +52,49 @@ public class FXMLDocumentController {
            areaDePintura.setStroke(selecionaCor.getValue());
         });
         
-        slider.setOnMouseDragged((ActionEvent) ->{
-            String str = String.format("%.0f", slider.getValue());
-            tamanhoLabel.setText(str);
+        slider.valueProperty().addListener((ActionEvent) ->{
+            tamanhoLabel.setText(String.format("%.0f", slider.getValue()));
             areaDePintura.setLineWidth(slider.getValue());
         });
 
-        tela.addEventHandler(MouseEvent.MOUSE_PRESSED,
-                new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (selecionaFerramenta.getValue().equals("Caneta")) {
-                    double size = slider.getValue();
-                    areaDePintura.beginPath();
-                    areaDePintura.moveTo(event.getX(), event.getY());
-                    areaDePintura.setLineCap(StrokeLineCap.ROUND);
-                    areaDePintura.setLineWidth(size);
-                    areaDePintura.stroke();
-                }else if(selecionaFerramenta.getValue().equals("Quadrado")){
-                    double size = slider.getValue();
-                    areaDePintura.setLineWidth(size);
-                    rect.setTranslateX(event.getX());
-                    rect.setTranslateY(event.getY());
-                    rect.setX(event.getX());
-                    rect.setY(event.getY());
-                }
+        tela.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
+            if (selecionaFerramenta.getValue().equals("Caneta")) {
+                areaDePintura.beginPath();
+                areaDePintura.moveTo(event.getX(), event.getY());
+                areaDePintura.setLineCap(StrokeLineCap.ROUND);
+                areaDePintura.stroke();
+            }else if(selecionaFerramenta.getValue().equals("Quadrado")){
+                rect.setTranslateX(event.getX());
+                rect.setTranslateY(event.getY());
+                rect.setX(event.getX());
+                rect.setY(event.getY());
             }
         });
 
-        tela.addEventHandler(MouseEvent.MOUSE_DRAGGED,
-                new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (selecionaFerramenta.getValue().equals("Caneta")) {
-                    areaDePintura.lineTo(event.getX(), event.getY());
-                    areaDePintura.stroke();
-                    areaDePintura.closePath();
-                    areaDePintura.beginPath();
-                    areaDePintura.moveTo(event.getX(), event.getY());
-                }
-                if (selecionaFerramenta.getValue().equals("Borracha")) {
-                    double size = slider.getValue();
-                    areaDePintura.clearRect(event.getX() - size / 2, event.getY() - size / 2, size, size);
-                }else if(selecionaFerramenta.getValue().equals("Quadrado")){
-                    rect.setWidth(event.getX() - rect.getTranslateX());
-                    rect.setHeight(event.getY() - rect.getTranslateY());
-                }
+        tela.addEventHandler(MouseEvent.MOUSE_DRAGGED, (MouseEvent event) -> {
+            if (selecionaFerramenta.getValue().equals("Caneta")) {
+                areaDePintura.lineTo(event.getX(), event.getY());
+                areaDePintura.stroke();
+                areaDePintura.closePath();
+                areaDePintura.beginPath();
+                areaDePintura.moveTo(event.getX(), event.getY());
+            }
+            if (selecionaFerramenta.getValue().equals("Borracha")) {
+                double size = slider.getValue();
+                areaDePintura.clearRect(event.getX() - size / 2, event.getY() - size / 2, size, size);
+            }else if(selecionaFerramenta.getValue().equals("Quadrado")){
+                rect.setWidth(event.getX() - rect.getTranslateX());
+                rect.setHeight(event.getY() - rect.getTranslateY());
             }
         });
 
-        tela.addEventHandler(MouseEvent.MOUSE_RELEASED,
-                new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (selecionaFerramenta.getValue().equals("Caneta")) {
-                    areaDePintura.lineTo(event.getX(), event.getY());
-                    areaDePintura.stroke();
-                    areaDePintura.closePath();
-                }else if(selecionaFerramenta.getValue().equals("Quadrado")){
-                    areaDePintura.strokeRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
-                }
+        tela.addEventHandler(MouseEvent.MOUSE_RELEASED, (MouseEvent event) -> {
+            if (selecionaFerramenta.getValue().equals("Caneta")) {
+                areaDePintura.lineTo(event.getX(), event.getY());
+                areaDePintura.stroke();
+                areaDePintura.closePath();
+            }else if(selecionaFerramenta.getValue().equals("Quadrado")){
+                areaDePintura.strokeRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
             }
         });
     }
@@ -122,7 +104,7 @@ public class FXMLDocumentController {
             Image snapshot = tela.snapshot(null, null);
 
             ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", new File("paint.png"));
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Failed to save image: " + e);
         }
     }
