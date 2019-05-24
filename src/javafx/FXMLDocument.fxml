@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ColorPicker?>
@@ -17,8 +18,8 @@
 <BorderPane style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx.FXMLDocumentController">
 
     <top>
-        <VBox>
-            <MenuBar>
+        <VBox minHeight="60.0" minWidth="600.0">
+            <MenuBar minHeight="25.0" minWidth="600.0" prefHeight="25.0" prefWidth="600.0">
                 <Menu text="Arquivo">
                     <MenuItem onAction="#onSave" text="Salvar" />
                     <MenuItem onAction="#onExit" text="Sair" />
@@ -39,8 +40,14 @@
    <center>
       <StackPane fx:id="fundo" prefHeight="600.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Canvas fx:id="tela" height="600.0" width="600.0" />
+            <Canvas fx:id="tela" height="600.0" width="600.0" StackPane.alignment="CENTER">
+               <StackPane.margin>
+                  <Insets />
+               </StackPane.margin></Canvas>
          </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
       </StackPane>
    </center>
 
