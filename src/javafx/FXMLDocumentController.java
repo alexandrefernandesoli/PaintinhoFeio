@@ -41,7 +41,7 @@ public class FXMLDocumentController {
     private Label tamanhoLabel;
 
     public void initialize() {
-        selecionaFerramenta.getItems().addAll("Caneta", "Borracha", "Balde", "Quadrado");
+        selecionaFerramenta.getItems().addAll("Caneta", "Borracha", "Balde", "Quadrado", "Reta");
         selecionaFerramenta.getSelectionModel().selectFirst();
         selecionaCor.setValue(Color.BLACK);
         slider.setShowTickMarks(true);
@@ -51,7 +51,7 @@ public class FXMLDocumentController {
         tela.heightProperty().bind(fundo.heightProperty());
         
         GraphicsContext areaDePintura = tela.getGraphicsContext2D();
-
+        
         selecionaFerramenta.setOnAction((ActionEvent) -> {
             System.out.println(selecionaFerramenta.getValue());
         });
@@ -91,8 +91,8 @@ public class FXMLDocumentController {
                 double size = slider.getValue();
                 areaDePintura.clearRect(event.getX() - size / 2, event.getY() - size / 2, size, size);
             }else if(selecionaFerramenta.getValue().equals("Quadrado")){
-                rect.setWidth(event.getX() - rect.getTranslateX());
-                rect.setHeight(event.getY() - rect.getTranslateY());
+                rect.setWidth(Math.abs(event.getX() - rect.getTranslateX()));
+                rect.setHeight(Math.abs(event.getY() - rect.getTranslateY()));
             }
         });
 
@@ -102,16 +102,19 @@ public class FXMLDocumentController {
                 areaDePintura.stroke();
                 areaDePintura.closePath();
             }else if(selecionaFerramenta.getValue().equals("Quadrado")){
+                if(event.getX() - rect.getTranslateX() < 0 || event.getY() - rect.getTranslateY() <0){
+                    rect.setX(event.getX());
+                    rect.setY(event.getY());
+                }    
                 areaDePintura.strokeRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
             }
         });
     }
-
+    
     public void onSave() {
         try {
             Image snapshot = tela.snapshot(null, null);
-
-            ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", new File("paint.png"));
+            ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", new java.io.File("paint.png"));
         } catch (IOException e) {
             System.out.println("Failed to save image: " + e);
         }
