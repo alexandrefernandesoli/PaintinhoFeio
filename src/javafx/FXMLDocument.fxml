@@ -21,7 +21,8 @@
         <VBox minHeight="60.0" minWidth="600.0">
             <MenuBar minHeight="25.0" minWidth="600.0" prefHeight="25.0" prefWidth="600.0">
                 <Menu text="Arquivo">
-                    <MenuItem onAction="#onSave" text="Salvar" />
+                    <MenuItem onAction="#onSave" text="Salvar imagem" />
+                    <MenuItem onAction="#onOpen" text="Abrir imagem" />
                     <MenuItem onAction="#onExit" text="Sair" />
                 </Menu>
             </MenuBar>
@@ -32,8 +33,8 @@
                     <ColorPicker fx:id="selecionaCor" />
                 </HBox>
                
-                <Slider fx:id="slider" max="100.0" min="1.0" value="12.0" />
-            <Label fx:id="tamanhoLabel" text="12" />
+                <Slider fx:id="slider" max="100.0" min="1.0" value="2" />
+            <Label fx:id="tamanhoLabel" text="2" />
             </ToolBar>
         </VBox>
     </top>

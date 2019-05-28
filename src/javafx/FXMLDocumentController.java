@@ -1,6 +1,5 @@
 package javafx;
 
-import componentes.ResizeCanvas;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
@@ -10,6 +9,8 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.image.Image;
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -19,11 +20,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.stage.FileChooser;
 
 public class FXMLDocumentController {
 
     @FXML
     private Canvas tela;
+    private GraphicsContext areaDePintura;
     
     @FXML
     private StackPane fundo;
@@ -50,7 +53,8 @@ public class FXMLDocumentController {
         tela.widthProperty().bind(fundo.widthProperty());
         tela.heightProperty().bind(fundo.heightProperty());
         
-        GraphicsContext areaDePintura = tela.getGraphicsContext2D();
+        areaDePintura = tela.getGraphicsContext2D();
+        areaDePintura.setLineWidth(2);
         
         selecionaFerramenta.setOnAction((ActionEvent) -> {
             System.out.println(selecionaFerramenta.getValue());
@@ -112,11 +116,34 @@ public class FXMLDocumentController {
     }
     
     public void onSave() {
-        try {
-            Image snapshot = tela.snapshot(null, null);
-            ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", new java.io.File("paint.png"));
-        } catch (IOException e) {
-            System.out.println("Failed to save image: " + e);
+        FileChooser salvaArquivo = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Arquivo JPG (*.jpg)", "*.jpg");
+        FileChooser.ExtensionFilter extFilter2 = new FileChooser.ExtensionFilter("Arquivo PNG (*.png)", "*.png");
+        FileChooser.ExtensionFilter extFilter3 = new FileChooser.ExtensionFilter("Arquivo GIF (*.gif)", "*.gif");
+        salvaArquivo.getExtensionFilters().addAll(extFilter, extFilter2, extFilter3);
+        salvaArquivo.setTitle("Salvar imagem");
+        File salvar = salvaArquivo.showSaveDialog(null);
+        
+        if(salvar != null){
+            try {
+                Image snapshot = tela.snapshot(null, null);
+                ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", salvar);
+            } catch (IOException e) {
+                System.out.println("Failed to save image: " + e);
+            } 
+        }
+    }
+    
+    public void onOpen() throws FileNotFoundException{
+        FileChooser escolheArquivo = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Arquivo de imagem", "*.png", "*.jpeg", "*.jpg", "*.gif");
+        escolheArquivo.getExtensionFilters().add(extFilter);
+        escolheArquivo.setTitle("Abrir imagem");
+        File escolha = escolheArquivo.showOpenDialog(null);
+        
+        if(escolha != null){
+            Image imagem =  new Image(new FileInputStream(escolha));
+            areaDePintura.drawImage(imagem, 0, 0);
         }
     }
 

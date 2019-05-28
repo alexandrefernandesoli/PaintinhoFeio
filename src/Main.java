@@ -15,6 +15,7 @@ public class Main extends Application {
         
         stage.setScene(scene);
         stage.setTitle("Paint Application");
+        stage.setMaximized(true);
         stage.show();
     }
 
