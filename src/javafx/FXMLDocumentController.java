@@ -44,7 +44,7 @@ public class FXMLDocumentController {
     private Label tamanhoLabel;
 
     public void initialize() {
-        selecionaFerramenta.getItems().addAll("Caneta", "Borracha", "Balde", "Quadrado", "Reta");
+        selecionaFerramenta.getItems().addAll("Caneta", "Borracha", "Balde", "Retangulo", "Reta");
         selecionaFerramenta.getSelectionModel().selectFirst();
         selecionaCor.setValue(Color.BLACK);
         slider.setShowTickMarks(true);
@@ -62,6 +62,7 @@ public class FXMLDocumentController {
         
         selecionaCor.setOnAction((ActionEvent) ->{
            areaDePintura.setStroke(selecionaCor.getValue());
+           areaDePintura.setFill(selecionaCor.getValue());
         });
         
         slider.valueProperty().addListener((ActionEvent) ->{
@@ -75,7 +76,7 @@ public class FXMLDocumentController {
                 areaDePintura.moveTo(event.getX(), event.getY());
                 areaDePintura.setLineCap(StrokeLineCap.ROUND);
                 areaDePintura.stroke();
-            }else if(selecionaFerramenta.getValue().equals("Quadrado")){
+            }else if(selecionaFerramenta.getValue().equals("Retangulo")){
                 rect.setTranslateX(event.getX());
                 rect.setTranslateY(event.getY());
                 rect.setX(event.getX());
@@ -94,7 +95,7 @@ public class FXMLDocumentController {
             if (selecionaFerramenta.getValue().equals("Borracha")) {
                 double size = slider.getValue();
                 areaDePintura.clearRect(event.getX() - size / 2, event.getY() - size / 2, size, size);
-            }else if(selecionaFerramenta.getValue().equals("Quadrado")){
+            }else if(selecionaFerramenta.getValue().equals("Retangulo")){
                 rect.setWidth(Math.abs(event.getX() - rect.getTranslateX()));
                 rect.setHeight(Math.abs(event.getY() - rect.getTranslateY()));
             }
@@ -105,12 +106,12 @@ public class FXMLDocumentController {
                 areaDePintura.lineTo(event.getX(), event.getY());
                 areaDePintura.stroke();
                 areaDePintura.closePath();
-            }else if(selecionaFerramenta.getValue().equals("Quadrado")){
+            }else if(selecionaFerramenta.getValue().equals("Retangulo")){
                 if(event.getX() - rect.getTranslateX() < 0 || event.getY() - rect.getTranslateY() <0){
                     rect.setX(event.getX());
                     rect.setY(event.getY());
                 }    
-                areaDePintura.strokeRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
+                areaDePintura.fillRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
             }
         });
     }
