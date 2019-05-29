@@ -1,5 +1,8 @@
 package javafx;
 
+import componentes.DesenhaCaneta;
+import componentes.SeguraTamanhoPincel;
+import componentes.Teste;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
@@ -22,7 +25,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.stage.FileChooser;
 
-public class FXMLDocumentController {
+public class FXMLDocumentController implements SeguraTamanhoPincel {
 
     @FXML
     private Canvas tela;
@@ -49,7 +52,8 @@ public class FXMLDocumentController {
         selecionaCor.setValue(Color.BLACK);
         slider.setShowTickMarks(true);
         Rectangle rect = new Rectangle();
-        
+        DesenhaCaneta caneta = new DesenhaCaneta();
+
         tela.widthProperty().bind(fundo.widthProperty());
         tela.heightProperty().bind(fundo.heightProperty());
         
@@ -72,10 +76,7 @@ public class FXMLDocumentController {
 
         tela.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
             if (selecionaFerramenta.getValue().equals("Caneta")) {
-                areaDePintura.beginPath();
-                areaDePintura.moveTo(event.getX(), event.getY());
-                areaDePintura.setLineCap(StrokeLineCap.ROUND);
-                areaDePintura.stroke();
+                caneta.clickDoMouse(areaDePintura, selecionaCor.getValue(), event);
             }else if(selecionaFerramenta.getValue().equals("Retangulo")){
                 rect.setTranslateX(event.getX());
                 rect.setTranslateY(event.getY());
@@ -86,11 +87,7 @@ public class FXMLDocumentController {
 
         tela.addEventHandler(MouseEvent.MOUSE_DRAGGED, (MouseEvent event) -> {
             if (selecionaFerramenta.getValue().equals("Caneta")) {
-                areaDePintura.lineTo(event.getX(), event.getY());
-                areaDePintura.stroke();
-                areaDePintura.closePath();
-                areaDePintura.beginPath();
-                areaDePintura.moveTo(event.getX(), event.getY());
+                caneta.arrastoDoMouse(areaDePintura, selecionaCor.getValue(), event);
             }
             if (selecionaFerramenta.getValue().equals("Borracha")) {
                 double size = slider.getValue();
@@ -103,9 +100,7 @@ public class FXMLDocumentController {
 
         tela.addEventHandler(MouseEvent.MOUSE_RELEASED, (MouseEvent event) -> {
             if (selecionaFerramenta.getValue().equals("Caneta")) {
-                areaDePintura.lineTo(event.getX(), event.getY());
-                areaDePintura.stroke();
-                areaDePintura.closePath();
+                caneta.soltarClickMouse(areaDePintura, selecionaCor.getValue(), event);
             }else if(selecionaFerramenta.getValue().equals("Retangulo")){
                 if(event.getX() - rect.getTranslateX() < 0 || event.getY() - rect.getTranslateY() <0){
                     rect.setX(event.getX());
@@ -150,5 +145,10 @@ public class FXMLDocumentController {
 
     public void onExit() {
         Platform.exit();
+    }
+
+    @Override
+    public double getTamanhoPincel(){
+        return slider.getValue();
     }
 }
