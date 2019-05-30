@@ -2,6 +2,7 @@ package javafx;
 
 import componentes.Arquivo;
 import componentes.DesenhaCaneta;
+import componentes.DesenhaRetangulo;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
@@ -48,9 +49,10 @@ public class MainController {
         selecionaFerramenta.getSelectionModel().selectFirst();
         selecionaCor.setValue(Color.BLACK);
         slider.setShowTickMarks(true);
-        Rectangle rect = new Rectangle();
+        
         DesenhaCaneta caneta = new DesenhaCaneta();
-
+        DesenhaRetangulo retangulo = new DesenhaRetangulo();
+        
         fundo.widthProperty().addListener((obs, oldVal, newVal) ->{
             if(fundo.getWidth() > tela.getWidth()){
                 tela.setWidth(fundo.getWidth());
@@ -86,10 +88,7 @@ public class MainController {
             if (selecionaFerramenta.getValue().equals("Caneta")) {
                 caneta.clickDoMouse(areaDePintura, selecionaCor.getValue(), event);
             } else if (selecionaFerramenta.getValue().equals("Retangulo")) {
-                rect.setTranslateX(event.getX());
-                rect.setTranslateY(event.getY());
-                rect.setX(event.getX());
-                rect.setY(event.getY());
+                retangulo.clickDoMouse(areaDePintura, selecionaCor.getValue(), event);
             }
         });
 
@@ -101,8 +100,7 @@ public class MainController {
                 double size = slider.getValue();
                 areaDePintura.clearRect(event.getX() - size / 2, event.getY() - size / 2, size, size);
             } else if (selecionaFerramenta.getValue().equals("Retangulo")) {
-                rect.setWidth(Math.abs(event.getX() - rect.getTranslateX()));
-                rect.setHeight(Math.abs(event.getY() - rect.getTranslateY()));
+                retangulo.arrastoDoMouse(areaDePintura, selecionaCor.getValue(), event);
             }
         });
 
@@ -110,11 +108,7 @@ public class MainController {
             if (selecionaFerramenta.getValue().equals("Caneta")) {
                 caneta.soltarClickMouse(areaDePintura, selecionaCor.getValue(), event);
             } else if (selecionaFerramenta.getValue().equals("Retangulo")) {
-                if (event.getX() - rect.getTranslateX() < 0 || event.getY() - rect.getTranslateY() < 0) {
-                    rect.setX(event.getX());
-                    rect.setY(event.getY());
-                }
-                areaDePintura.fillRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
+                retangulo.soltarClickMouse(areaDePintura, selecionaCor.getValue(), event);
             }
         });
     }
