@@ -8,26 +8,26 @@ import javafx.scene.shape.StrokeLineCap;
 
 public class DesenhaCaneta implements Ferramentas {
     @Override
-    public void clickDoMouse(GraphicsContext areaDePintura, Paint cor, MouseEvent event) {
-        areaDePintura.beginPath();
-        areaDePintura.moveTo(event.getX(), event.getY());
-        areaDePintura.setLineCap(StrokeLineCap.ROUND);
-        areaDePintura.stroke();
+    public void clickDoMouse(GraphicsContext gc, MouseEvent event) {
+        gc.beginPath();
+        gc.moveTo(event.getX(), event.getY());
+        gc.setLineCap(StrokeLineCap.ROUND);
+        gc.stroke();
     }
 
     @Override
-    public void arrastoDoMouse(GraphicsContext areaDePintura, Paint cor, MouseEvent event) {
-        areaDePintura.lineTo(event.getX(), event.getY());
-        areaDePintura.stroke();
-        areaDePintura.closePath();
-        areaDePintura.beginPath();
-        areaDePintura.moveTo(event.getX(), event.getY());
+    public void arrastoDoMouse(GraphicsContext gc, MouseEvent event) {
+        gc.lineTo(event.getX(), event.getY());
+        gc.stroke();
+        gc.closePath();
+        gc.beginPath();
+        gc.moveTo(event.getX(), event.getY());
     }
 
     @Override
-    public void soltarClickMouse(GraphicsContext areaDePintura, Paint cor, MouseEvent event) {
-        areaDePintura.lineTo(event.getX(), event.getY());
-        areaDePintura.stroke();
-        areaDePintura.closePath();
+    public void soltarClickMouse(GraphicsContext gc, MouseEvent event) {
+        gc.lineTo(event.getX(), event.getY());
+        gc.stroke();
+        gc.closePath();
     }
 }
