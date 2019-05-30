@@ -31,11 +31,14 @@ public class DesenhaRetangulo implements Ferramentas {
 
     @Override
     public void soltarClickMouse(GraphicsContext gc, MouseEvent event) {
-        if (event.getX() - rect.getTranslateX() < 0 || event.getY() - rect.getTranslateY() < 0) {
+        if (event.getX() < rect.getX())
             rect.setX(event.getX());
+        if (event.getY() < rect.getY())
             rect.setY(event.getY());
-        }
+
         gc.fillRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
+        rect.setWidth(0);
+        rect.setHeight(0);
     }
 
 }

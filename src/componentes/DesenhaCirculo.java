@@ -23,10 +23,13 @@ public class DesenhaCirculo implements Ferramentas {
 
     @Override
     public void soltarClickMouse(GraphicsContext gc, MouseEvent event) {
-        if (event.getX() < coordenadaX || event.getY() < coordenadaY) {
+        if (event.getX() < coordenadaX)
             coordenadaX = event.getX();
+        if (event.getY() < coordenadaY)
             coordenadaY = event.getY();
-        }
+
         gc.fillOval(coordenadaX, coordenadaY, largura, altura);
+        altura = 0;
+        largura = 0;
     }
 }
