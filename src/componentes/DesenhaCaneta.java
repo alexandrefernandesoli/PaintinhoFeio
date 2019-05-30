@@ -1,8 +1,6 @@
 package componentes;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Paint;
-
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.StrokeLineCap;
 

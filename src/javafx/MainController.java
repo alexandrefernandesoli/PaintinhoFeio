@@ -64,7 +64,6 @@ public class MainController {
         fundo.heightProperty().addListener((obs, oldVal, newVal) ->{
             if(fundo.getHeight() > tela.getHeight()){
                 tela.setHeight(fundo.getHeight());
-                System.out.println(tela.getHeight());
             }
         });
 

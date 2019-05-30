@@ -7,7 +7,6 @@ package componentes;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 /**

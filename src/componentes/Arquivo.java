@@ -13,7 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class Arquivo {
+public abstract class Arquivo {
     public static void salvarArquivo(Canvas tela, Label mensagens) {
         FileChooser salvaArquivo = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Arquivo JPG (*.jpg)", "*.jpg");

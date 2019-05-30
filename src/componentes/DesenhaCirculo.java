@@ -2,7 +2,6 @@ package componentes;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Paint;
 
 public class DesenhaCirculo implements Ferramentas {
     private double coordenadaX;
