@@ -11,14 +11,13 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 /**
- *
  * @author Felipe Hiroshi
  */
-public class DesenhaRetangulo implements Ferramentas{
+public class DesenhaRetangulo implements Ferramentas {
     Rectangle rect = new Rectangle();
-    
+
     @Override
-    public void clickDoMouse(GraphicsContext gc, Paint cor, MouseEvent event) {
+    public void clickDoMouse(GraphicsContext gc, MouseEvent event) {
         rect.setTranslateX(event.getX());
         rect.setTranslateY(event.getY());
         rect.setX(event.getX());
@@ -26,18 +25,18 @@ public class DesenhaRetangulo implements Ferramentas{
     }
 
     @Override
-    public void arrastoDoMouse(GraphicsContext gc, Paint cor, MouseEvent event) {
+    public void arrastoDoMouse(GraphicsContext gc, MouseEvent event) {
         rect.setWidth(Math.abs(event.getX() - rect.getTranslateX()));
         rect.setHeight(Math.abs(event.getY() - rect.getTranslateY()));
     }
 
     @Override
-    public void soltarClickMouse(GraphicsContext gc, Paint cor, MouseEvent event) {
+    public void soltarClickMouse(GraphicsContext gc, MouseEvent event) {
         if (event.getX() - rect.getTranslateX() < 0 || event.getY() - rect.getTranslateY() < 0) {
             rect.setX(event.getX());
             rect.setY(event.getY());
         }
         gc.fillRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
     }
-    
+
 }

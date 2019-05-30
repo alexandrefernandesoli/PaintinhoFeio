@@ -2,6 +2,7 @@ package javafx;
 
 import componentes.Arquivo;
 import componentes.DesenhaCaneta;
+import componentes.DesenhaCirculo;
 import componentes.DesenhaRetangulo;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
@@ -45,13 +46,15 @@ public class MainController {
     private Label mensagens;
 
     public void initialize() {
-        selecionaFerramenta.getItems().addAll("Caneta", "Borracha", "Balde", "Retangulo", "Reta");
+        areaDePintura = tela.getGraphicsContext2D();
+        selecionaFerramenta.getItems().addAll("Caneta", "Borracha", "Balde", "Retangulo", "Circulo");
         selecionaFerramenta.getSelectionModel().selectFirst();
         selecionaCor.setValue(Color.BLACK);
         slider.setShowTickMarks(true);
         
         DesenhaCaneta caneta = new DesenhaCaneta();
         DesenhaRetangulo retangulo = new DesenhaRetangulo();
+        DesenhaCirculo circulo = new DesenhaCirculo();
         
         fundo.widthProperty().addListener((obs, oldVal, newVal) ->{
             if(fundo.getWidth() > tela.getWidth()){
@@ -64,10 +67,7 @@ public class MainController {
                 System.out.println(tela.getHeight());
             }
         });
-//        tela.widthProperty().bind(fundo.widthProperty());
-//        tela.heightProperty().bind(fundo.heightProperty());
 
-        areaDePintura = tela.getGraphicsContext2D();
         areaDePintura.setLineWidth(2);
 
         selecionaFerramenta.setOnAction((ActionEvent) -> {
@@ -86,29 +86,35 @@ public class MainController {
 
         tela.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
             if (selecionaFerramenta.getValue().equals("Caneta")) {
-                caneta.clickDoMouse(areaDePintura, selecionaCor.getValue(), event);
+                caneta.clickDoMouse(areaDePintura, event);
             } else if (selecionaFerramenta.getValue().equals("Retangulo")) {
-                retangulo.clickDoMouse(areaDePintura, selecionaCor.getValue(), event);
+                retangulo.clickDoMouse(areaDePintura, event);
+            } else if (selecionaFerramenta.getValue().equals("Circulo")){
+                circulo.clickDoMouse(areaDePintura, event);
             }
         });
 
         tela.addEventHandler(MouseEvent.MOUSE_DRAGGED, (MouseEvent event) -> {
             if (selecionaFerramenta.getValue().equals("Caneta")) {
-                caneta.arrastoDoMouse(areaDePintura, selecionaCor.getValue(), event);
+                caneta.arrastoDoMouse(areaDePintura, event);
             }
             if (selecionaFerramenta.getValue().equals("Borracha")) {
                 double size = slider.getValue();
                 areaDePintura.clearRect(event.getX() - size / 2, event.getY() - size / 2, size, size);
             } else if (selecionaFerramenta.getValue().equals("Retangulo")) {
-                retangulo.arrastoDoMouse(areaDePintura, selecionaCor.getValue(), event);
+                retangulo.arrastoDoMouse(areaDePintura, event);
+            } else if (selecionaFerramenta.getValue().equals("Circulo")){
+                circulo.arrastoDoMouse(areaDePintura, event);
             }
         });
 
         tela.addEventHandler(MouseEvent.MOUSE_RELEASED, (MouseEvent event) -> {
             if (selecionaFerramenta.getValue().equals("Caneta")) {
-                caneta.soltarClickMouse(areaDePintura, selecionaCor.getValue(), event);
+                caneta.soltarClickMouse(areaDePintura, event);
             } else if (selecionaFerramenta.getValue().equals("Retangulo")) {
-                retangulo.soltarClickMouse(areaDePintura, selecionaCor.getValue(), event);
+                retangulo.soltarClickMouse(areaDePintura, event);
+            } else if (selecionaFerramenta.getValue().equals("Circulo")){
+                circulo.soltarClickMouse(areaDePintura, event);
             }
         });
     }
