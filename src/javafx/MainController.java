@@ -20,6 +20,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -30,7 +31,7 @@ public class MainController {
     private Canvas tela;
     private GraphicsContext areaDePintura;
     @FXML
-    private StackPane fundo;
+    private AnchorPane fundo;
     @FXML
     private ColorPicker selecionaCor;
     @FXML
@@ -50,8 +51,19 @@ public class MainController {
         Rectangle rect = new Rectangle();
         DesenhaCaneta caneta = new DesenhaCaneta();
 
-        tela.widthProperty().bind(fundo.widthProperty());
-        tela.heightProperty().bind(fundo.heightProperty());
+        fundo.widthProperty().addListener((obs, oldVal, newVal) ->{
+            if(fundo.getWidth() > tela.getWidth()){
+                tela.setWidth(fundo.getWidth());
+            }
+        });
+        fundo.heightProperty().addListener((obs, oldVal, newVal) ->{
+            if(fundo.getHeight() > tela.getHeight()){
+                tela.setHeight(fundo.getHeight());
+                System.out.println(tela.getHeight());
+            }
+        });
+//        tela.widthProperty().bind(fundo.widthProperty());
+//        tela.heightProperty().bind(fundo.heightProperty());
 
         areaDePintura = tela.getGraphicsContext2D();
         areaDePintura.setLineWidth(2);

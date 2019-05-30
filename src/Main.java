@@ -14,6 +14,8 @@ public class Main extends Application {
 
         stage.setScene(scene);
         stage.setTitle("Paintinho Feio");
+        stage.setMinHeight(700);
+        stage.setMinWidth(700);
         stage.setMaximized(true);
         stage.show();
     }
