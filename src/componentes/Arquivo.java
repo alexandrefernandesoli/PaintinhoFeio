@@ -13,7 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public abstract class Arquivo {
+public final class Arquivo {
     public static void salvarArquivo(Canvas tela, Label mensagens) {
         FileChooser salvaArquivo = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Arquivo JPG (*.jpg)", "*.jpg");
@@ -43,6 +43,7 @@ public abstract class Arquivo {
         if (escolha != null) {
             try {
                 Image imagem = new Image(new FileInputStream(escolha));
+                mensagens.setText("Imagem aberta com sucesso!");
                 areaDePintura.drawImage(imagem, 0, 0);
             } catch (FileNotFoundException e) {
                 mensagens.setText("Failed to save image: " + e);

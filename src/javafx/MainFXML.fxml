@@ -8,30 +8,37 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<BorderPane id="borderPane" stylesheets="/recursos/Estilo.css" xmlns="http://javafx.com/javafx/8.0.171"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx.MainController">
+<BorderPane id="borderPane" stylesheets="/recursos/Estilo.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx.MainController">
     <top>
-        <VBox minHeight="60" maxHeight="60.0">
+        <VBox maxHeight="60.0" minHeight="60">
             <MenuBar minHeight="25.0" prefHeight="25.0">
                 <Menu text="Arquivo">
-                    <MenuItem onAction="#onSave" text="Salvar imagem"/>
-                    <MenuItem onAction="#onOpen" text="Abrir imagem"/>
-                    <MenuItem onAction="#onExit" text="Sair"/>
+                    <MenuItem onAction="#onSave" text="Salvar imagem" />
+                    <MenuItem onAction="#onOpen" text="Abrir imagem" />
+                    <MenuItem onAction="#onExit" text="Sair" />
                 </Menu>
             </MenuBar>
             <ToolBar>
+            <ToggleButton mnemonicParsing="true" selected="true" text="_Caneta">
+               <toggleGroup>
+                  <ToggleGroup fx:id="ferramentas" />
+               </toggleGroup>
+            </ToggleButton>
+            <ToggleButton mnemonicParsing="true" text="_Borracha" toggleGroup="$ferramentas" />
                 <HBox alignment="CENTER" spacing="5">
-                    <ChoiceBox fx:id="selecionaFerramenta" prefWidth="150.0"/>
-                    <ColorPicker fx:id="selecionaCor"/>
+                    <ChoiceBox fx:id="selecionaFerramenta" prefWidth="150.0" />
+                    <ColorPicker fx:id="selecionaCor" prefHeight="25.0" prefWidth="90.0" />
                 </HBox>
-                <Slider fx:id="slider" max="100.0" min="1.0" value="2"/>
-                <Label fx:id="tamanhoLabel" text="2"/>
+                <Slider fx:id="slider" max="100.0" min="1.0" prefHeight="14.0" prefWidth="190.0" value="2" />
+                <Label fx:id="tamanhoLabel" text="2" />
             </ToolBar>
         </VBox>
     </top>
@@ -45,7 +52,7 @@
     <bottom>
         <HBox id="hbox">
             <children>
-                <Label id="mensagens" fx:id="mensagens" text="Paintinho Feio"/>
+                <Label id="mensagens" fx:id="mensagens" text="Paintinho Feio" />
             </children>
         </HBox>
     </bottom>

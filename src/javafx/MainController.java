@@ -5,30 +5,15 @@ import componentes.DesenhaCaneta;
 import componentes.DesenhaCirculo;
 import componentes.DesenhaRetangulo;
 import javafx.application.Platform;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.image.Image;
-
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.FileChooser;
 
-public class MainController {
+public class MainController implements SeguraElementos{
     @FXML
     private Canvas tela;
     private GraphicsContext areaDePintura;
@@ -44,6 +29,8 @@ public class MainController {
     private Label tamanhoLabel;
     @FXML
     private Label mensagens;
+    @FXML
+    private ToggleGroup ferramentas;
 
     public void initialize() {
         areaDePintura = tela.getGraphicsContext2D();
@@ -51,18 +38,18 @@ public class MainController {
         selecionaFerramenta.getSelectionModel().selectFirst();
         selecionaCor.setValue(Color.BLACK);
         slider.setShowTickMarks(true);
-        
+
         DesenhaCaneta caneta = new DesenhaCaneta();
         DesenhaRetangulo retangulo = new DesenhaRetangulo();
         DesenhaCirculo circulo = new DesenhaCirculo();
-        
-        fundo.widthProperty().addListener((obs, oldVal, newVal) ->{
-            if(fundo.getWidth() > tela.getWidth()){
+
+        fundo.widthProperty().addListener((obs, oldVal, newVal) -> {
+            if (fundo.getWidth() > tela.getWidth()) {
                 tela.setWidth(fundo.getWidth());
             }
         });
-        fundo.heightProperty().addListener((obs, oldVal, newVal) ->{
-            if(fundo.getHeight() > tela.getHeight()){
+        fundo.heightProperty().addListener((obs, oldVal, newVal) -> {
+            if (fundo.getHeight() > tela.getHeight()) {
                 tela.setHeight(fundo.getHeight());
             }
         });
@@ -71,6 +58,11 @@ public class MainController {
 
         selecionaFerramenta.setOnAction((ActionEvent) -> {
             mensagens.setText(selecionaFerramenta.getValue().toString());
+            if(selecionaFerramenta.getValue().equals("Borracha")){
+                selecionaCor.setDisable(true);
+            }else{
+                selecionaCor.setDisable(false);
+            }
         });
 
         selecionaCor.setOnAction((ActionEvent) -> {
@@ -88,7 +80,7 @@ public class MainController {
                 caneta.clickDoMouse(areaDePintura, event);
             } else if (selecionaFerramenta.getValue().equals("Retangulo")) {
                 retangulo.clickDoMouse(areaDePintura, event);
-            } else if (selecionaFerramenta.getValue().equals("Circulo")){
+            } else if (selecionaFerramenta.getValue().equals("Circulo")) {
                 circulo.clickDoMouse(areaDePintura, event);
             }
         });
@@ -102,7 +94,7 @@ public class MainController {
                 areaDePintura.clearRect(event.getX() - size / 2, event.getY() - size / 2, size, size);
             } else if (selecionaFerramenta.getValue().equals("Retangulo")) {
                 retangulo.arrastoDoMouse(areaDePintura, event);
-            } else if (selecionaFerramenta.getValue().equals("Circulo")){
+            } else if (selecionaFerramenta.getValue().equals("Circulo")) {
                 circulo.arrastoDoMouse(areaDePintura, event);
             }
         });
@@ -112,10 +104,20 @@ public class MainController {
                 caneta.soltarClickMouse(areaDePintura, event);
             } else if (selecionaFerramenta.getValue().equals("Retangulo")) {
                 retangulo.soltarClickMouse(areaDePintura, event);
-            } else if (selecionaFerramenta.getValue().equals("Circulo")){
+            } else if (selecionaFerramenta.getValue().equals("Circulo")) {
                 circulo.soltarClickMouse(areaDePintura, event);
             }
         });
+    }
+
+    @Override
+    public Canvas getTela(){
+        return tela;
+    }
+
+    @Override
+    public ToggleButton getSelecionado(){
+        return (ToggleButton) ferramentas.getSelectedToggle();
     }
 
     public void onSave() {
