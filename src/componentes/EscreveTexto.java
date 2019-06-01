@@ -17,9 +17,7 @@ import javafx.scene.text.Text;
 public class EscreveTexto {
     double x;
     double y;
-    boolean escreve = false;
-    
-    
+
     public void clickDoMouse(TextField txtTexto, GraphicsContext areaDePintura, MouseEvent event){
         String texto;
         txtTexto.setVisible(true);

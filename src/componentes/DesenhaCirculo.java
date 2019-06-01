@@ -7,25 +7,18 @@ public class DesenhaCirculo extends Forma implements Ferramentas {
  
     @Override
     public void clickDoMouse(GraphicsContext gc, MouseEvent event) {
-        coordenadaX = event.getX() - 10;
-        coordenadaY = event.getY() - 10;
+        coordenadas(event);
     }
 
     @Override
     public void arrastoDoMouse(GraphicsContext gc, MouseEvent event) {
-        largura = Math.abs(event.getX() - coordenadaX) + 15;
-        altura = Math.abs(event.getY() - coordenadaY) + 15;
+        tamanho(event);
     }
 
     @Override
     public void soltarClickMouse(GraphicsContext gc, MouseEvent event) {
-        if (event.getX() < coordenadaX)
-            coordenadaX = event.getX();
-        if (event.getY() < coordenadaY)
-            coordenadaY = event.getY();
-
+        posicao(event);
         gc.fillOval(coordenadaX, coordenadaY, largura, altura);
-        altura = 0;
-        largura = 0;
+        finaliza();
     }
 }

@@ -5,6 +5,8 @@
  */
 package componentes;
 
+import javafx.scene.input.MouseEvent;
+
 /**
  *
  * @author Felipe Hiroshi
@@ -14,4 +16,26 @@ abstract class Forma {
     double coordenadaY;
     double largura;
     double altura;
+    
+    public void coordenadas(MouseEvent event){
+        coordenadaX = event.getX();
+        coordenadaY = event.getY();
+    }
+    
+    public void tamanho(MouseEvent event){
+        largura = Math.abs(event.getX() - coordenadaX);
+        altura = Math.abs(event.getY() - coordenadaY);
+    }
+    
+    public void posicao(MouseEvent event){
+        if (event.getX() < coordenadaX)
+            coordenadaX = event.getX();
+        if (event.getY() < coordenadaY)
+            coordenadaY = event.getY();
+    }
+    
+    public void finaliza(){
+        altura = 0;
+        largura = 0;
+    }
 }
