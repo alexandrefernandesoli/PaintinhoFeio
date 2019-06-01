@@ -16,7 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import sun.plugin.com.Dispatch;
 
-public class MainController implements SeguraElementos{
+public class MainController implements SeguraElementos {
     @FXML
     private Canvas tela;
     private GraphicsContext areaDePintura;
@@ -42,23 +42,23 @@ public class MainController implements SeguraElementos{
     private ToggleButton tbRetangulo;
     @FXML
     private ToggleButton tbCirculo;
-    @FXML 
+    @FXML
     private ToggleButton tbTexto;
     @FXML
     private TextField txtTexto;
-            
-    DesenhaCaneta caneta = new DesenhaCaneta();
-    DesenhaRetangulo retangulo = new DesenhaRetangulo();
-    DesenhaCirculo circulo = new DesenhaCirculo();
-    EscreveTexto texto = new EscreveTexto();
-    
+
+    private DesenhaCaneta caneta = new DesenhaCaneta();
+    private DesenhaRetangulo retangulo = new DesenhaRetangulo();
+    private DesenhaCirculo circulo = new DesenhaCirculo();
+    private EscreveTexto texto = new EscreveTexto();
+
     public void initialize() {
         areaDePintura = tela.getGraphicsContext2D();
         selecionaCor.setValue(Color.BLACK);
         slider.setShowTickMarks(true);
         tbCaneta.setSelected(true);
         txtTexto.setVisible(false);
-        
+
         fundo.widthProperty().addListener((obs, oldVal, newVal) -> {
             if (fundo.getWidth() > tela.getWidth()) {
                 tela.setWidth(fundo.getWidth());
@@ -72,14 +72,13 @@ public class MainController implements SeguraElementos{
 
         areaDePintura.setLineWidth(2);
 
-//        selecionaFerramenta.setOnAction((ActionEvent) -> {
-//            mensagens.setText(selecionaFerramenta.getValue().toString());
-//            if(selecionaFerramenta.getValue().equals("Borracha")){
-//                selecionaCor.setDisable(true);
-//            }else{
-//                selecionaCor.setDisable(false);
-//            }
-//        });
+        tbBorracha.selectedProperty().addListener((obs, valorAntigo, valorNovo) -> {
+            if (valorNovo) {
+                selecionaCor.setDisable(true);
+            } else {
+                selecionaCor.setDisable(false);
+            }
+        });
 
         selecionaCor.setOnAction((ActionEvent) -> {
             areaDePintura.setStroke(selecionaCor.getValue());
@@ -90,7 +89,7 @@ public class MainController implements SeguraElementos{
             tamanhoLabel.setText(String.format("%.0f", slider.getValue()));
             areaDePintura.setLineWidth(slider.getValue());
         });
-        
+
         tela.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
             txtTexto.setVisible(false);
             if (tbCaneta.isSelected()) {
@@ -99,7 +98,7 @@ public class MainController implements SeguraElementos{
                 retangulo.clickDoMouse(areaDePintura, event);
             } else if (tbCirculo.isSelected()) {
                 circulo.clickDoMouse(areaDePintura, event);
-            } else if(tbTexto.isSelected()){
+            } else if (tbTexto.isSelected()) {
                 texto.clickDoMouse(txtTexto, areaDePintura, event);
             }
         });
@@ -125,22 +124,22 @@ public class MainController implements SeguraElementos{
                 retangulo.soltarClickMouse(areaDePintura, event);
             } else if (tbCirculo.isSelected()) {
                 circulo.soltarClickMouse(areaDePintura, event);
-            } else if(tbTexto.isSelected()){
+            } else if (tbTexto.isSelected()) {
                 texto.soltarClickMouse(txtTexto, areaDePintura, event);
             }
         });
     }
 
     @Override
-    public Canvas getTela(){
+    public Canvas getTela() {
         return tela;
     }
 
     @Override
-    public ToggleButton getSelecionado(){
+    public ToggleButton getSelecionado() {
         return (ToggleButton) ferramentas.getSelectedToggle();
     }
-   
+
     public void onSave() {
         Arquivo.salvarArquivo(tela, mensagens);
     }
