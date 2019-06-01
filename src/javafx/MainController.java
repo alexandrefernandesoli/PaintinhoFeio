@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javax.swing.JOptionPane;
 
 public class MainController implements SeguraElementos{
     @FXML
@@ -39,8 +40,11 @@ public class MainController implements SeguraElementos{
     private ToggleButton tbRetangulo;
     @FXML
     private ToggleButton tbCirculo;
-    
-    
+    @FXML 
+    private ToggleButton tbTexto;
+    @FXML
+    private TextField txtTexto;
+            
     DesenhaCaneta caneta = new DesenhaCaneta();
     DesenhaRetangulo retangulo = new DesenhaRetangulo();
     DesenhaCirculo circulo = new DesenhaCirculo();
@@ -51,7 +55,8 @@ public class MainController implements SeguraElementos{
         selecionaCor.setValue(Color.BLACK);
         slider.setShowTickMarks(true);
         tbCaneta.setSelected(true);
-
+        txtTexto.setVisible(false);
+        
         fundo.widthProperty().addListener((obs, oldVal, newVal) -> {
             if (fundo.getWidth() > tela.getWidth()) {
                 tela.setWidth(fundo.getWidth());
@@ -91,7 +96,13 @@ public class MainController implements SeguraElementos{
                 retangulo.clickDoMouse(areaDePintura, event);
             } else if (tbCirculo.isSelected()) {
                 circulo.clickDoMouse(areaDePintura, event);
+            } else if(tbTexto.isSelected()){
+                String texto;
+                txtTexto.setVisible(true);
+                texto = txtTexto.getText();
+                areaDePintura.strokeText(texto, event.getX(), event.getY());
             }
+            
         });
 
         tela.addEventHandler(MouseEvent.MOUSE_DRAGGED, (MouseEvent event) -> {
@@ -129,23 +140,7 @@ public class MainController implements SeguraElementos{
         return (ToggleButton) ferramentas.getSelectedToggle();
     }
     
-//    @FXML
-//    private void clickCaneta(ActionEvent event){
-//        tbCaneta.setSelected(true);
-//    }
-//    
-//    @FXML
-//    private void clickBorracha(ActionEvent event){
-//        System.out.println("oi");
-//       tbBorracha.setSelected(true);
-//    }
-//    
-//    @FXML
-//    private void clickRetangulo(ActionEvent event){
-//        System.out.println("oi");
-//       tbRetangulo.setSelected(true);
-//    }
-
+    
     public void onSave() {
         Arquivo.salvarArquivo(tela, mensagens);
     }

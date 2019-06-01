@@ -8,6 +8,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.ToolBar?>
@@ -34,17 +35,19 @@
             </ToggleButton>
             <ToggleButton fx:id="tbBorracha" mnemonicParsing="true" text="_Borracha" toggleGroup="$ferramentas" />
             <ToggleButton fx:id="tbRetangulo" mnemonicParsing="false" text="Retangulo" toggleGroup="$ferramentas" />
-            <ToggleButton fx:id="tbCirculo" mnemonicParsing="false" text="Circulo" toggleGroup="$ferramentas" />
+            <ToggleButton fx:id="tbCirculo" mnemonicParsing="true" text="Circulo" toggleGroup="$ferramentas" />
+            <ToggleButton fx:id="tbTexto" mnemonicParsing="false" text="Texto" toggleGroup="$ferramentas" />
                 <HBox alignment="CENTER" spacing="5">
                     <ColorPicker fx:id="selecionaCor" prefHeight="25.0" prefWidth="90.0" />
                 </HBox>
+            <TextField fx:id="txtTexto" promptText="Digite o texto" />
                 <Slider fx:id="slider" max="100.0" min="1.0" prefHeight="14.0" prefWidth="190.0" value="2" />
                 <Label fx:id="tamanhoLabel" text="2" />
             </ToolBar>
         </VBox>
     </top>
     <center>
-        <AnchorPane fx:id="fundo" minHeight="500.0" minWidth="500.0" BorderPane.alignment="CENTER">
+        <AnchorPane fx:id="fundo" minHeight="500.0" minWidth="490.0" prefHeight="500.0" prefWidth="490.0" BorderPane.alignment="CENTER">
             <children>
                 <Canvas fx:id="tela" height="500.0" width="500.0">
                <cursor>
