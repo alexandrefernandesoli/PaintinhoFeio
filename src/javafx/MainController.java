@@ -5,7 +5,6 @@ import componentes.DesenhaCaneta;
 import componentes.DesenhaCirculo;
 import componentes.DesenhaRetangulo;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -38,6 +37,8 @@ public class MainController implements SeguraElementos{
     private ToggleButton tbBorracha;
     @FXML
     private ToggleButton tbRetangulo;
+    @FXML
+    private ToggleButton tbCirculo;
     
     
     DesenhaCaneta caneta = new DesenhaCaneta();
@@ -47,8 +48,6 @@ public class MainController implements SeguraElementos{
     
     public void initialize() {
         areaDePintura = tela.getGraphicsContext2D();
-        selecionaFerramenta.getItems().addAll("Caneta", "Borracha", "Balde", "Retangulo", "Circulo");
-        selecionaFerramenta.getSelectionModel().selectFirst();
         selecionaCor.setValue(Color.BLACK);
         slider.setShowTickMarks(true);
         tbCaneta.setSelected(true);
@@ -66,14 +65,14 @@ public class MainController implements SeguraElementos{
 
         areaDePintura.setLineWidth(2);
 
-        selecionaFerramenta.setOnAction((ActionEvent) -> {
-            mensagens.setText(selecionaFerramenta.getValue().toString());
-            if(selecionaFerramenta.getValue().equals("Borracha")){
-                selecionaCor.setDisable(true);
-            }else{
-                selecionaCor.setDisable(false);
-            }
-        });
+//        selecionaFerramenta.setOnAction((ActionEvent) -> {
+//            mensagens.setText(selecionaFerramenta.getValue().toString());
+//            if(selecionaFerramenta.getValue().equals("Borracha")){
+//                selecionaCor.setDisable(true);
+//            }else{
+//                selecionaCor.setDisable(false);
+//            }
+//        });
 
         selecionaCor.setOnAction((ActionEvent) -> {
             areaDePintura.setStroke(selecionaCor.getValue());
@@ -90,7 +89,7 @@ public class MainController implements SeguraElementos{
                 caneta.clickDoMouse(areaDePintura, event);
             } else if (tbRetangulo.isSelected()) {
                 retangulo.clickDoMouse(areaDePintura, event);
-            } else if (selecionaFerramenta.getValue().equals("Circulo")) {
+            } else if (tbCirculo.isSelected()) {
                 circulo.clickDoMouse(areaDePintura, event);
             }
         });
@@ -104,7 +103,7 @@ public class MainController implements SeguraElementos{
                 areaDePintura.clearRect(event.getX() - size / 2, event.getY() - size / 2, size, size);
             } else if (tbRetangulo.isSelected()) {
                 retangulo.arrastoDoMouse(areaDePintura, event);
-            } else if (selecionaFerramenta.getValue().equals("Circulo")) {
+            } else if (tbCirculo.isSelected()) {
                 circulo.arrastoDoMouse(areaDePintura, event);
             }
         });
@@ -114,7 +113,7 @@ public class MainController implements SeguraElementos{
                 caneta.soltarClickMouse(areaDePintura, event);
             } else if (tbRetangulo.isSelected()) {
                 retangulo.soltarClickMouse(areaDePintura, event);
-            } else if (selecionaFerramenta.getValue().equals("Circulo")) {
+            } else if (tbCirculo.isSelected()) {
                 circulo.soltarClickMouse(areaDePintura, event);
             }
         });
