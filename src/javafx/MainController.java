@@ -5,6 +5,7 @@ import componentes.DesenhaCaneta;
 import componentes.DesenhaCirculo;
 import componentes.DesenhaRetangulo;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -31,17 +32,22 @@ public class MainController implements SeguraElementos{
     private Label mensagens;
     @FXML
     private ToggleGroup ferramentas;
-
+    private ToggleButton btnCaneta;
+    private ToggleButton btnBorracha;
+    private ToggleButton btnRetangulo;
+    
+    
+    DesenhaCaneta caneta = new DesenhaCaneta();
+    DesenhaRetangulo retangulo = new DesenhaRetangulo();
+    DesenhaCirculo circulo = new DesenhaCirculo();
+    
+    
     public void initialize() {
         areaDePintura = tela.getGraphicsContext2D();
         selecionaFerramenta.getItems().addAll("Caneta", "Borracha", "Balde", "Retangulo", "Circulo");
         selecionaFerramenta.getSelectionModel().selectFirst();
         selecionaCor.setValue(Color.BLACK);
         slider.setShowTickMarks(true);
-
-        DesenhaCaneta caneta = new DesenhaCaneta();
-        DesenhaRetangulo retangulo = new DesenhaRetangulo();
-        DesenhaCirculo circulo = new DesenhaCirculo();
 
         fundo.widthProperty().addListener((obs, oldVal, newVal) -> {
             if (fundo.getWidth() > tela.getWidth()) {
@@ -118,6 +124,26 @@ public class MainController implements SeguraElementos{
     @Override
     public ToggleButton getSelecionado(){
         return (ToggleButton) ferramentas.getSelectedToggle();
+    }
+    
+    @FXML
+    private void clickCaneta(ActionEvent event){
+        tela.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event1) -> caneta.clickDoMouse(areaDePintura, event1));
+        tela.addEventHandler(MouseEvent.MOUSE_DRAGGED, (MouseEvent event1) -> caneta.arrastoDoMouse(areaDePintura, event1));
+        tela.addEventHandler(MouseEvent.MOUSE_RELEASED, (MouseEvent event1) -> caneta.soltarClickMouse(areaDePintura, event1));
+    }
+    
+    @FXML
+    private void clickBorracha(ActionEvent event){
+        double size = slider.getValue();
+        tela.addEventHandler(MouseEvent.MOUSE_DRAGGED, (MouseEvent event1) -> areaDePintura.clearRect(event1.getX() - size / 2, event1.getY() - size / 2, size, size));
+    }
+    
+    @FXML
+    private void clickRetangulo(ActionEvent event){
+        tela.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event1) -> retangulo.clickDoMouse(areaDePintura, event1));
+        tela.addEventHandler(MouseEvent.MOUSE_DRAGGED, (MouseEvent event1) -> retangulo.arrastoDoMouse(areaDePintura, event1));
+        tela.addEventHandler(MouseEvent.MOUSE_RELEASED, (MouseEvent event1) -> retangulo.soltarClickMouse(areaDePintura, event1));
     }
 
     public void onSave() {

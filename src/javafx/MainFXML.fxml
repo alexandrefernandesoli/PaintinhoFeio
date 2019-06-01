@@ -27,12 +27,13 @@
                 </Menu>
             </MenuBar>
             <ToolBar>
-            <ToggleButton mnemonicParsing="true" selected="true" text="_Caneta">
+            <ToggleButton fx:id="btnCaneta" mnemonicParsing="true" onAction="#clickCaneta" selected="true" text="_Caneta">
                <toggleGroup>
                   <ToggleGroup fx:id="ferramentas" />
                </toggleGroup>
             </ToggleButton>
-            <ToggleButton mnemonicParsing="true" text="_Borracha" toggleGroup="$ferramentas" />
+            <ToggleButton fx:id="btnBorracha" mnemonicParsing="true" onAction="#clickBorracha" text="_Borracha" toggleGroup="$ferramentas" />
+            <ToggleButton fx:id="btnRetangulo" mnemonicParsing="false" onAction="#clickRetangulo" text="Retangulo" />
                 <HBox alignment="CENTER" spacing="5">
                     <ChoiceBox fx:id="selecionaFerramenta" prefWidth="150.0" />
                     <ColorPicker fx:id="selecionaCor" prefHeight="25.0" prefWidth="90.0" />
