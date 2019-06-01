@@ -4,14 +4,17 @@ import componentes.Arquivo;
 import componentes.DesenhaCaneta;
 import componentes.DesenhaCirculo;
 import componentes.DesenhaRetangulo;
+import componentes.EscreveTexto;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import sun.plugin.com.Dispatch;
 
 public class MainController implements SeguraElementos{
     @FXML
@@ -47,7 +50,7 @@ public class MainController implements SeguraElementos{
     DesenhaCaneta caneta = new DesenhaCaneta();
     DesenhaRetangulo retangulo = new DesenhaRetangulo();
     DesenhaCirculo circulo = new DesenhaCirculo();
-    
+    EscreveTexto texto = new EscreveTexto();
     
     public void initialize() {
         areaDePintura = tela.getGraphicsContext2D();
@@ -96,12 +99,7 @@ public class MainController implements SeguraElementos{
             } else if (tbCirculo.isSelected()) {
                 circulo.clickDoMouse(areaDePintura, event);
             } else if(tbTexto.isSelected()){
-                String texto;
-                txtTexto.setVisible(true);
-                txtTexto.setTranslateX(event.getX());
-                txtTexto.setTranslateY(event.getY());
-                texto = txtTexto.getText();
-                areaDePintura.strokeText(texto, event.getX(), event.getY());
+                texto.clickDoMouse(txtTexto, areaDePintura, event);
             }
         });
 
@@ -127,6 +125,7 @@ public class MainController implements SeguraElementos{
             } else if (tbCirculo.isSelected()) {
                 circulo.soltarClickMouse(areaDePintura, event);
             } else if(tbTexto.isSelected()){
+                texto.soltarClickMouse(txtTexto, areaDePintura, event);
             }
         });
     }
