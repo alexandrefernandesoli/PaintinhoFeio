@@ -12,7 +12,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javax.swing.JOptionPane;
 
 public class MainController implements SeguraElementos{
     @FXML
@@ -99,10 +98,11 @@ public class MainController implements SeguraElementos{
             } else if(tbTexto.isSelected()){
                 String texto;
                 txtTexto.setVisible(true);
+                txtTexto.setTranslateX(event.getX());
+                txtTexto.setTranslateY(event.getY());
                 texto = txtTexto.getText();
                 areaDePintura.strokeText(texto, event.getX(), event.getY());
             }
-            
         });
 
         tela.addEventHandler(MouseEvent.MOUSE_DRAGGED, (MouseEvent event) -> {
@@ -126,6 +126,7 @@ public class MainController implements SeguraElementos{
                 retangulo.soltarClickMouse(areaDePintura, event);
             } else if (tbCirculo.isSelected()) {
                 circulo.soltarClickMouse(areaDePintura, event);
+            } else if(tbTexto.isSelected()){
             }
         });
     }
@@ -139,8 +140,7 @@ public class MainController implements SeguraElementos{
     public ToggleButton getSelecionado(){
         return (ToggleButton) ferramentas.getSelectedToggle();
     }
-    
-    
+   
     public void onSave() {
         Arquivo.salvarArquivo(tela, mensagens);
     }
