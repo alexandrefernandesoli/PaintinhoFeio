@@ -3,12 +3,8 @@ package componentes;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 
-public class DesenhaCirculo implements Ferramentas {
-    private double coordenadaX;
-    private double coordenadaY;
-    private double largura;
-    private double altura;
-
+public class DesenhaCirculo extends Forma implements Ferramentas {
+ 
     @Override
     public void clickDoMouse(GraphicsContext gc, MouseEvent event) {
         coordenadaX = event.getX() - 10;

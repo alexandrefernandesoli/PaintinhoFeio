@@ -12,33 +12,31 @@ import javafx.scene.shape.Rectangle;
 /**
  * @author Felipe Hiroshi
  */
-public class DesenhaRetangulo implements Ferramentas {
-    Rectangle rect = new Rectangle();
+public class DesenhaRetangulo extends Forma implements Ferramentas {
 
-    @Override
+
+     @Override
     public void clickDoMouse(GraphicsContext gc, MouseEvent event) {
-        rect.setTranslateX(event.getX());
-        rect.setTranslateY(event.getY());
-        rect.setX(event.getX());
-        rect.setY(event.getY());
+        coordenadaX = event.getX();
+        coordenadaY = event.getY();
     }
 
     @Override
     public void arrastoDoMouse(GraphicsContext gc, MouseEvent event) {
-        rect.setWidth(Math.abs(event.getX() - rect.getTranslateX()));
-        rect.setHeight(Math.abs(event.getY() - rect.getTranslateY()));
+        largura = Math.abs(event.getX() - coordenadaX);
+        altura = Math.abs(event.getY() - coordenadaY);
     }
 
     @Override
     public void soltarClickMouse(GraphicsContext gc, MouseEvent event) {
-        if (event.getX() < rect.getX())
-            rect.setX(event.getX());
-        if (event.getY() < rect.getY())
-            rect.setY(event.getY());
+        if (event.getX() < coordenadaX)
+            coordenadaX = event.getX();
+        if (event.getY() < coordenadaY)
+            coordenadaY = event.getY();
 
-        gc.fillRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
-        rect.setWidth(0);
-        rect.setHeight(0);
+        gc.fillRect(coordenadaX, coordenadaY, largura, altura);
+        altura = 0;
+        largura = 0;
     }
 
 }

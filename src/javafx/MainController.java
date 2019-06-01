@@ -92,6 +92,7 @@ public class MainController implements SeguraElementos{
         });
         
         tela.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
+            txtTexto.setVisible(false);
             if (tbCaneta.isSelected()) {
                 caneta.clickDoMouse(areaDePintura, event);
             } else if (tbRetangulo.isSelected()) {

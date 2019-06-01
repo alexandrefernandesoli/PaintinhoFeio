@@ -24,7 +24,6 @@ public class EscreveTexto {
         String texto;
         txtTexto.setVisible(true);
         if(txtTexto.getText().equals("")){
-            System.out.println("oioio");
             x = event.getX();
             y = event.getY();
         }
