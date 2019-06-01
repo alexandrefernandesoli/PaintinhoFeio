@@ -56,15 +56,14 @@ public class MainController implements SeguraElementos {
         areaDePintura = tela.getGraphicsContext2D();
         selecionaCor.setValue(Color.BLACK);
         slider.setShowTickMarks(true);
-        tbCaneta.setSelected(true);
         txtTexto.setVisible(false);
 
-        fundo.widthProperty().addListener((obs, oldVal, newVal) -> {
+        fundo.widthProperty().addListener((obs) -> {
             if (fundo.getWidth() > tela.getWidth()) {
                 tela.setWidth(fundo.getWidth());
             }
         });
-        fundo.heightProperty().addListener((obs, oldVal, newVal) -> {
+        fundo.heightProperty().addListener((obs) -> {
             if (fundo.getHeight() > tela.getHeight()) {
                 tela.setHeight(fundo.getHeight());
             }
@@ -78,6 +77,11 @@ public class MainController implements SeguraElementos {
             } else {
                 selecionaCor.setDisable(false);
             }
+        });
+
+        ferramentas.selectedToggleProperty().addListener((obs, valorAntigo, valorNovo) -> {
+            if (valorNovo == null)
+                valorAntigo.setSelected(true);
         });
 
         selecionaCor.setOnAction((ActionEvent) -> {
