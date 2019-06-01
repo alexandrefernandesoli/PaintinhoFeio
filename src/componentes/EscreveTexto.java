@@ -31,7 +31,7 @@ public class EscreveTexto {
         txtTexto.setTranslateX(x);
         txtTexto.setTranslateY(y);
         texto = txtTexto.getText();
-        areaDePintura.strokeText(texto, x, y);
+        areaDePintura.fillText(texto, x, y+20);
     }
     
     public void soltarClickMouse(TextField txtTexto, GraphicsContext areaDePintura, MouseEvent event){
