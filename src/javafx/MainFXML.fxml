@@ -34,6 +34,7 @@
                </toggleGroup>
             </ToggleButton>
             <ToggleButton fx:id="tbBorracha" mnemonicParsing="true" text="_Borracha" toggleGroup="$ferramentas" />
+            <ToggleButton fx:id="tbReta" mnemonicParsing="false" text="Reta" toggleGroup="$ferramentas" />
             <ToggleButton fx:id="tbRetangulo" mnemonicParsing="false" text="Retangulo" toggleGroup="$ferramentas" />
             <ToggleButton fx:id="tbCirculo" mnemonicParsing="true" text="Circulo" toggleGroup="$ferramentas" />
             <ToggleButton fx:id="tbTexto" mnemonicParsing="false" text="Texto" toggleGroup="$ferramentas" />

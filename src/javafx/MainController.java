@@ -3,6 +3,7 @@ package javafx;
 import componentes.Arquivo;
 import componentes.DesenhaCaneta;
 import componentes.DesenhaCirculo;
+import componentes.DesenhaReta;
 import componentes.DesenhaRetangulo;
 import componentes.EscreveTexto;
 import javafx.application.Platform;
@@ -44,6 +45,8 @@ public class MainController implements SeguraElementos{
     private ToggleButton tbCirculo;
     @FXML 
     private ToggleButton tbTexto;
+    @FXML 
+    private ToggleButton tbReta;
     @FXML
     private TextField txtTexto;
             
@@ -51,6 +54,7 @@ public class MainController implements SeguraElementos{
     DesenhaRetangulo retangulo = new DesenhaRetangulo();
     DesenhaCirculo circulo = new DesenhaCirculo();
     EscreveTexto texto = new EscreveTexto();
+    DesenhaReta reta = new DesenhaReta();
     
     public void initialize() {
         areaDePintura = tela.getGraphicsContext2D();
@@ -101,6 +105,8 @@ public class MainController implements SeguraElementos{
                 circulo.clickDoMouse(areaDePintura, event);
             } else if(tbTexto.isSelected()){
                 texto.clickDoMouse(txtTexto, areaDePintura, event);
+            } else if(tbReta.isSelected()){
+                reta.clickDoMouse(areaDePintura, event);
             }
         });
 
@@ -115,6 +121,8 @@ public class MainController implements SeguraElementos{
                 retangulo.arrastoDoMouse(areaDePintura, event);
             } else if (tbCirculo.isSelected()) {
                 circulo.arrastoDoMouse(areaDePintura, event);
+            } else if(tbReta.isSelected()){
+                reta.arrastoDoMouse(areaDePintura, event);
             }
         });
 
@@ -127,6 +135,8 @@ public class MainController implements SeguraElementos{
                 circulo.soltarClickMouse(areaDePintura, event);
             } else if(tbTexto.isSelected()){
                 texto.soltarClickMouse(txtTexto, areaDePintura, event);
+            } else if(tbReta.isSelected()){
+                reta.soltarClickMouse(areaDePintura, event);
             }
         });
     }
