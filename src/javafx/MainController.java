@@ -6,12 +6,16 @@ import componentes.DesenhaCirculo;
 import componentes.DesenhaReta;
 import componentes.DesenhaRetangulo;
 import componentes.EscreveTexto;
+import componentes.UndoRedo;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -20,7 +24,12 @@ import sun.plugin.com.Dispatch;
 public class MainController implements SeguraElementos {
     @FXML
     private Canvas tela;
+    @FXML
+    private Canvas telaUndo;
+    @FXML
     private GraphicsContext areaDePintura;
+    @FXML
+    private GraphicsContext areaDeUndo;
     @FXML
     private AnchorPane fundo;
     @FXML
@@ -49,29 +58,30 @@ public class MainController implements SeguraElementos {
     private ToggleButton tbReta;
     @FXML
     private TextField txtTexto;
+    @FXML
+    private Button btnUndo;
+    @FXML
+    private Button btnRedo;
+    
+    
             
     DesenhaCaneta caneta = new DesenhaCaneta();
     DesenhaRetangulo retangulo = new DesenhaRetangulo();
     DesenhaCirculo circulo = new DesenhaCirculo();
     EscreveTexto texto = new EscreveTexto();
     DesenhaReta reta = new DesenhaReta();
+    UndoRedo undoRedo = new UndoRedo();
+    boolean undo = false;
     
     public void initialize() {
         areaDePintura = tela.getGraphicsContext2D();
+        areaDeUndo = telaUndo.getGraphicsContext2D();
         selecionaCor.setValue(Color.BLACK);
         slider.setShowTickMarks(true);
         txtTexto.setVisible(false);
-
-        fundo.widthProperty().addListener((obs) -> {
-            if (fundo.getWidth() > tela.getWidth()) {
-                tela.setWidth(fundo.getWidth());
-            }
-        });
-        fundo.heightProperty().addListener((obs) -> {
-            if (fundo.getHeight() > tela.getHeight()) {
-                tela.setHeight(fundo.getHeight());
-            }
-        });
+        telaUndo.setVisible(false);
+        
+        resize();
 
         areaDePintura.setLineWidth(2);
 
@@ -110,7 +120,10 @@ public class MainController implements SeguraElementos {
                 texto.clickDoMouse(txtTexto, areaDePintura, event);
             } else if(tbReta.isSelected()){
                 reta.clickDoMouse(areaDePintura, event);
+            }if(undo){
+                undoRedo.copia(tela, telaUndo);
             }
+            undo = true;
         });
 
         tela.addEventHandler(MouseEvent.MOUSE_DRAGGED, (MouseEvent event) -> {
@@ -132,6 +145,7 @@ public class MainController implements SeguraElementos {
         tela.addEventHandler(MouseEvent.MOUSE_RELEASED, (MouseEvent event) -> {
             if (tbCaneta.isSelected()) {
                 caneta.soltarClickMouse(areaDePintura, event);
+                //areaDeUndo.fillRect(event.getX(), event.getY(), 100, 100);
             } else if (tbRetangulo.isSelected()) {
                 retangulo.soltarClickMouse(areaDePintura, event);
             } else if (tbCirculo.isSelected()) {
@@ -140,7 +154,7 @@ public class MainController implements SeguraElementos {
                 texto.soltarClickMouse(txtTexto, areaDePintura, event);
             } else if(tbReta.isSelected()){
                 reta.soltarClickMouse(areaDePintura, event);
-            }
+            } 
         });
     }
 
@@ -153,7 +167,27 @@ public class MainController implements SeguraElementos {
     public ToggleButton getSelecionado() {
         return (ToggleButton) ferramentas.getSelectedToggle();
     }
-
+    
+    @FXML
+    public void clickUndo(ActionEvent event){
+        undoRedo.clickUndo(tela, telaUndo);
+    }
+    
+    public void resize(){
+        fundo.widthProperty().addListener((obs) -> {
+            if (fundo.getWidth() > tela.getWidth()) {
+                tela.setWidth(fundo.getWidth());
+                telaUndo.setWidth(fundo.getWidth());
+            }
+        });
+        fundo.heightProperty().addListener((obs) -> {
+            if (fundo.getHeight() > tela.getHeight()) {
+                tela.setHeight(fundo.getHeight());
+                telaUndo.setHeight(fundo.getHeight());
+            }
+        });
+    }
+    
     public void onSave() {
         Arquivo.salvarArquivo(tela, mensagens);
     }

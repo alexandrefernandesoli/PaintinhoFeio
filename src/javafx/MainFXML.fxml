@@ -2,6 +2,7 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -39,6 +40,8 @@
             <ToggleButton fx:id="tbCirculo" mnemonicParsing="true" text="Circulo" toggleGroup="$ferramentas" />
             <ToggleButton fx:id="tbTexto" mnemonicParsing="false" text="Texto" toggleGroup="$ferramentas" />
                 <HBox alignment="CENTER" spacing="5">
+               <Button fx:id="btnUndo" mnemonicParsing="false" onAction="#clickUndo" text="Undo " />
+               <Button fx:id="btnRedo" mnemonicParsing="false" text="Redo" />
                     <ColorPicker fx:id="selecionaCor" prefHeight="25.0" prefWidth="90.0" />
                 </HBox>
                 <Slider fx:id="slider" max="100.0" min="1.0" prefHeight="14.0" prefWidth="190.0" value="2" />
@@ -54,6 +57,11 @@
                   <Cursor fx:constant="CROSSHAIR" />
                </cursor></Canvas>
             <TextField fx:id="txtTexto" layoutY="2.0" promptText="Digite o texto" />
+            <Canvas fx:id="telaUndo" height="500.0" layoutX="10.0" layoutY="10.0" width="500.0">
+               <cursor>
+                  <Cursor fx:constant="CROSSHAIR" />
+               </cursor>
+            </Canvas>
             </children>
         </AnchorPane>
     </center>
