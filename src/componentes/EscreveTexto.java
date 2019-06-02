@@ -5,6 +5,7 @@
  */
 package componentes;
 
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -17,7 +18,7 @@ import javafx.scene.text.Text;
 public class EscreveTexto {
     double x;
     double y;
-
+    
     public void clickDoMouse(TextField txtTexto, GraphicsContext areaDePintura, MouseEvent event){
         String texto;
         txtTexto.setVisible(true);
@@ -28,12 +29,12 @@ public class EscreveTexto {
         txtTexto.setTranslateX(x);
         txtTexto.setTranslateY(y);
         texto = txtTexto.getText();
+        if(!txtTexto.getText().equals(""))
+            txtTexto.setVisible(false);
         areaDePintura.fillText(texto, x, y+20);
     }
     
     public void soltarClickMouse(TextField txtTexto, GraphicsContext areaDePintura, MouseEvent event){
-        if(!txtTexto.getText().equals(""))
-            txtTexto.setVisible(false);
         txtTexto.clear();  
     }
     

@@ -110,6 +110,8 @@ public class MainController implements SeguraElementos {
 
         tela.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
             txtTexto.setVisible(false);
+            if(undo)
+                undoRedo.copia(tela, telaUndo);
             if (tbCaneta.isSelected()) {
                 caneta.clickDoMouse(areaDePintura, event);
             } else if (tbRetangulo.isSelected()) {
@@ -120,8 +122,6 @@ public class MainController implements SeguraElementos {
                 texto.clickDoMouse(txtTexto, areaDePintura, event);
             } else if(tbReta.isSelected()){
                 reta.clickDoMouse(areaDePintura, event);
-            }if(undo){
-                undoRedo.copia(tela, telaUndo);
             }
             undo = true;
         });
@@ -152,6 +152,7 @@ public class MainController implements SeguraElementos {
                 circulo.soltarClickMouse(areaDePintura, event);
             } else if (tbTexto.isSelected()) {
                 texto.soltarClickMouse(txtTexto, areaDePintura, event);
+                
             } else if(tbReta.isSelected()){
                 reta.soltarClickMouse(areaDePintura, event);
             } 
@@ -171,6 +172,11 @@ public class MainController implements SeguraElementos {
     @FXML
     public void clickUndo(ActionEvent event){
         undoRedo.clickUndo(tela, telaUndo);
+    }
+    
+    @FXML
+    public void clickRedo(ActionEvent event){
+        undoRedo.redo(tela, telaUndo);
     }
     
     public void resize(){

@@ -41,7 +41,7 @@
             <ToggleButton fx:id="tbTexto" mnemonicParsing="false" text="Texto" toggleGroup="$ferramentas" />
                 <HBox alignment="CENTER" spacing="5">
                <Button fx:id="btnUndo" mnemonicParsing="false" onAction="#clickUndo" text="Undo " />
-               <Button fx:id="btnRedo" mnemonicParsing="false" text="Redo" />
+               <Button fx:id="btnRedo" mnemonicParsing="false" onAction="#clickRedo" text="Redo" />
                     <ColorPicker fx:id="selecionaCor" prefHeight="25.0" prefWidth="90.0" />
                 </HBox>
                 <Slider fx:id="slider" max="100.0" min="1.0" prefHeight="14.0" prefWidth="190.0" value="2" />
