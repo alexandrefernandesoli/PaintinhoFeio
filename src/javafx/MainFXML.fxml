@@ -30,29 +30,28 @@
                     <MenuItem onAction="#onOpen" text="Abrir imagem"/>
                     <MenuItem onAction="#onExit" text="Sair"/>
                 </Menu>
-                <Menu text="Arquivos recentes..." fx:id="arquivosRecentes"/>
+                <Menu fx:id="arquivosRecentes" text="Arquivos recentes..."/>
             </MenuBar>
             <ToolBar>
-                <ToggleButton fx:id="tbCaneta" mnemonicParsing="true" selected="true" text="_Caneta">
+                <ToggleButton fx:id="tbCaneta" mnemonicParsing="false" selected="true" text="Caneta">
                     <toggleGroup>
                         <ToggleGroup fx:id="ferramentas"/>
                     </toggleGroup>
                 </ToggleButton>
-                <ToggleButton fx:id="tbBorracha" mnemonicParsing="true" text="_Borracha" toggleGroup="$ferramentas"/>
+                <ToggleButton fx:id="tbBorracha" mnemonicParsing="false" text="Borracha" toggleGroup="$ferramentas"/>
                 <ToggleButton fx:id="tbReta" mnemonicParsing="false" text="Reta" toggleGroup="$ferramentas"/>
                 <ToggleButton fx:id="tbRetangulo" mnemonicParsing="false" text="Retangulo" toggleGroup="$ferramentas"/>
-                <ToggleButton fx:id="tbCirculo" mnemonicParsing="true" text="Circulo" toggleGroup="$ferramentas"/>
+                <ToggleButton fx:id="tbCirculo" mnemonicParsing="false" text="Circulo" toggleGroup="$ferramentas"/>
                 <ToggleButton fx:id="tbTexto" mnemonicParsing="false" text="Texto" toggleGroup="$ferramentas"/>
                 <ToggleButton fx:id="tbBalde" mnemonicParsing="false" text="Balde" toggleGroup="$ferramentas"/>
-                <HBox alignment="CENTER" spacing="5">
-                    <ColorPicker fx:id="selecionaCor" prefHeight="25.0" prefWidth="90.0"/>
-                    <Slider fx:id="slider" max="100.0" min="1.0" prefHeight="14.0" prefWidth="98.0" value="2"/>
-                    <Label fx:id="tamanhoLabel" text="2"/>
-                    <Line endX="-53.328582763671875" endY="-7.0355072021484375" startX="-53.32843017578125"
-                          startY="-36.328399658203125" stroke="#9e9c9c"/>
-                    <Button fx:id="btnUndo" mnemonicParsing="false" onAction="#clickUndo" text="Undo "/>
-                    <Button fx:id="btnRedo" mnemonicParsing="false" onAction="#clickRedo" text="Redo"/>
+                <HBox alignment="CENTER" spacing="5.0">
+                    <ColorPicker fx:id="selecionaCor" />
+                    <Slider fx:id="slider" min="1.0" prefWidth="98.0" value="2"/>
+                    <Label fx:id="tamanhoLabel" maxWidth="20.0" minWidth="20.0" text="2"/>
                 </HBox>
+                <Line endX="-53" endY="-7" startX="-53" startY="-36" stroke="#9e9c9c" strokeLineCap="ROUND"/>
+                <Button fx:id="btnUndo" mnemonicParsing="false" onAction="#clickUndo" text="Undo "/>
+                <Button fx:id="btnRedo" mnemonicParsing="false" onAction="#clickRedo" text="Redo"/>
                 <VBox.margin>
                     <Insets/>
                 </VBox.margin>
@@ -66,21 +65,15 @@
     <center>
         <AnchorPane fx:id="fundo" minHeight="500.0" minWidth="490.0" prefHeight="500.0" prefWidth="490.0"
                     BorderPane.alignment="CENTER">
-            <children>
-                <Canvas fx:id="tela" height="500.0" width="500.0">
-                    <cursor>
-                        <Cursor fx:constant="CROSSHAIR"/>
-                    </cursor>
-                </Canvas>
-                <TextField fx:id="txtTexto" layoutY="2.0" promptText="Digite o texto"/>
-            </children>
+            <Canvas fx:id="tela" height="500.0" width="500.0">
+                <cursor>
+                    <Cursor fx:constant="CROSSHAIR"/>
+                </cursor>
+            </Canvas>
+            <TextField fx:id="txtTexto" layoutY="2.0" promptText="Digite o texto"/>
+            <BorderPane.margin>
+                <Insets top="1.0"/>
+            </BorderPane.margin>
         </AnchorPane>
     </center>
-    <bottom>
-        <HBox id="hbox">
-            <children>
-                <Label id="mensagens" fx:id="mensagens" text="Paintinho Feio"/>
-            </children>
-        </HBox>
-    </bottom>
 </BorderPane>

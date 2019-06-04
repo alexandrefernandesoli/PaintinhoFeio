@@ -21,6 +21,7 @@ public class EscreveTexto {
     public void clickDoMouse(TextField txtTexto, GraphicsContext areaDePintura, MouseEvent event) {
         String texto;
         txtTexto.setVisible(true);
+        txtTexto.requestFocus();
         if (txtTexto.getText().equals("")) {
             x = event.getX();
             y = event.getY();
@@ -30,6 +31,10 @@ public class EscreveTexto {
         texto = txtTexto.getText();
         if (!txtTexto.getText().equals(""))
             txtTexto.setVisible(false);
+        txtTexto.setOnAction(e ->{
+            areaDePintura.fillText(txtTexto.getText(), x, y + 20);
+            txtTexto.setVisible(false);
+        });
         areaDePintura.fillText(texto, x, y + 20);
     }
 

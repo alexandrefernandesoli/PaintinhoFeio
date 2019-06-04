@@ -8,7 +8,6 @@ import componentes.DesenhaRetangulo;
 import componentes.EscreveTexto;
 import componentes.UndoRedo;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -17,7 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
-public class MainController implements SeguraElementos {
+public class MainController {
     @FXML
     private Canvas tela;
     private GraphicsContext areaDePintura;
@@ -29,8 +28,6 @@ public class MainController implements SeguraElementos {
     private Slider slider;
     @FXML
     private Label tamanhoLabel;
-    @FXML
-    private Label mensagens;
     @FXML
     private ToggleGroup ferramentas;
     @FXML
@@ -63,7 +60,6 @@ public class MainController implements SeguraElementos {
     private EscreveTexto texto = new EscreveTexto();
     private DesenhaReta reta = new DesenhaReta();
     private UndoRedo undoRedo = new UndoRedo();
-    private boolean undo = false;
 
     public void initialize() {
         arquivosRecentes.getItems().add(new MenuItem("Arquivo exemplo"));
@@ -71,34 +67,12 @@ public class MainController implements SeguraElementos {
         selecionaCor.setValue(Color.BLACK);
         slider.setShowTickMarks(true);
         txtTexto.setVisible(false);
-        statesUndoRedo(0);
 
-        resize();
+        statesUndoRedo(0);
+        redimensionaCanvas();
+        adicionaListeners();
 
         areaDePintura.setLineWidth(2);
-
-        tbBorracha.selectedProperty().addListener((obs, valorAntigo, valorNovo) -> {
-            if (valorNovo) {
-                selecionaCor.setDisable(true);
-            } else {
-                selecionaCor.setDisable(false);
-            }
-        });
-
-        ferramentas.selectedToggleProperty().addListener((obs, valorAntigo, valorNovo) -> {
-            if (valorNovo == null)
-                valorAntigo.setSelected(true);
-        });
-
-        selecionaCor.setOnAction((ActionEvent) -> {
-            areaDePintura.setStroke(selecionaCor.getValue());
-            areaDePintura.setFill(selecionaCor.getValue());
-        });
-
-        slider.valueProperty().addListener((ActionEvent) -> {
-            tamanhoLabel.setText(String.format("%.0f", slider.getValue()));
-            areaDePintura.setLineWidth(slider.getValue());
-        });
 
         tela.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
             txtTexto.setVisible(false);
@@ -115,10 +89,9 @@ public class MainController implements SeguraElementos {
                 texto.clickDoMouse(txtTexto, areaDePintura, event);
             } else if (tbReta.isSelected()) {
                 reta.clickDoMouse(areaDePintura, event);
-            } else if (tbBalde.isSelected()) {
+            }// else if (tbBalde.isSelected()) {
 
-            }
-            undo = true;
+            //}
         });
 
         tela.addEventHandler(MouseEvent.MOUSE_DRAGGED, (MouseEvent event) -> {
@@ -153,16 +126,6 @@ public class MainController implements SeguraElementos {
         });
     }
 
-    @Override
-    public Canvas getTela() {
-        return tela;
-    }
-
-    @Override
-    public ToggleButton getSelecionado() {
-        return (ToggleButton) ferramentas.getSelectedToggle();
-    }
-
     @FXML
     public void clickUndo() {
         undoRedo.clickUndo(tela);
@@ -175,7 +138,7 @@ public class MainController implements SeguraElementos {
         statesUndoRedo(3);
     }
 
-    public void resize() {
+    private void redimensionaCanvas() {
         fundo.widthProperty().addListener((obs) -> {
             if (fundo.getWidth() > tela.getWidth()) {
                 tela.setWidth(fundo.getWidth());
@@ -188,7 +151,7 @@ public class MainController implements SeguraElementos {
         });
     }
 
-    public void statesUndoRedo(int i) {
+    private void statesUndoRedo(int i) {
         if (i == 0) {
             btnRedo.setDisable(true);
             btnUndo.setDisable(true);
@@ -207,13 +170,38 @@ public class MainController implements SeguraElementos {
         }
     }
 
+    private void adicionaListeners() {
+        tbBorracha.selectedProperty().addListener((obs, valorAntigo, valorNovo) -> {
+            if (valorNovo) {
+                selecionaCor.setDisable(true);
+            } else {
+                selecionaCor.setDisable(false);
+            }
+        });
+
+        ferramentas.selectedToggleProperty().addListener((obs, valorAntigo, valorNovo) -> {
+            if (valorNovo == null)
+                valorAntigo.setSelected(true);
+        });
+
+        selecionaCor.setOnAction((ActionEvent) -> {
+            areaDePintura.setStroke(selecionaCor.getValue());
+            areaDePintura.setFill(selecionaCor.getValue());
+        });
+
+        slider.valueProperty().addListener((ActionEvent) -> {
+            tamanhoLabel.setText(String.format("%.0f", slider.getValue()));
+            areaDePintura.setLineWidth(slider.getValue());
+        });
+    }
+
 
     public void onSave() {
-        Arquivo.salvarArquivo(tela, mensagens);
+        Arquivo.salvarArquivo(tela);
     }
 
     public void onOpen() {
-        Arquivo.abrirArquivo(areaDePintura, mensagens);
+        Arquivo.abrirArquivo(areaDePintura);
     }
 
     public void onExit() {

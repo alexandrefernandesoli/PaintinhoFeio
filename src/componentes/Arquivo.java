@@ -6,39 +6,47 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import jdk.nashorn.internal.scripts.JO;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public final class Arquivo {
-    public static void salvarArquivo(Canvas tela, Label mensagens) {
+public class Arquivo {
+    private static Stage primaryStage;
+
+    public static void salvarArquivo(Canvas tela) {
         FileChooser salvaArquivo = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Arquivo JPG (*.jpg)", "*.jpg");
-        FileChooser.ExtensionFilter extFilter2 = new FileChooser.ExtensionFilter("Arquivo PNG (*.png)", "*.png");
-        FileChooser.ExtensionFilter extFilter3 = new FileChooser.ExtensionFilter("Arquivo GIF (*.gif)", "*.gif");
-        salvaArquivo.getExtensionFilters().addAll(extFilter, extFilter2, extFilter3);
+        String[] extensoes = {"png", "jpg", "gif"};
+        for(String extensao: extensoes){
+            FileChooser.ExtensionFilter filtro = new FileChooser.ExtensionFilter("Arquivo "+
+                    extensao.toUpperCase()+" (*."+extensao+")","*."+extensao);
+            salvaArquivo.getExtensionFilters().add(filtro);
+        }
         salvaArquivo.setTitle("Salvar imagem");
-        File salvar = salvaArquivo.showSaveDialog(null);
+        File salvar = salvaArquivo.showSaveDialog(primaryStage);
 
         if (salvar != null) {
             try {
                 Image snapshot = tela.snapshot(null, null);
                 ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", salvar);
             } catch (IOException e) {
-                mensagens.setText("Failed to save image: " + e);
+                JOptionPane.showMessageDialog(null, e);
             }
         }
     }
 
-    public static void abrirArquivo(GraphicsContext areaDePintura, Label mensagens) {
+    public static void abrirArquivo(GraphicsContext areaDePintura) {
         FileChooser escolheArquivo = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Arquivo de imagem", "*.png", "*.jpeg", "*.jpg", "*.gif");
         escolheArquivo.getExtensionFilters().add(extFilter);
         escolheArquivo.setTitle("Abrir imagem");
-        File escolha = escolheArquivo.showOpenDialog(null);
+        File escolha = escolheArquivo.showOpenDialog(primaryStage);
 
         if (escolha != null) {
             try {
@@ -47,11 +55,15 @@ public final class Arquivo {
                     areaDePintura.getCanvas().setWidth(imagem.getWidth());
                     areaDePintura.getCanvas().setHeight(imagem.getHeight());
                 }
-                mensagens.setText("Imagem aberta com sucesso!");
                 areaDePintura.drawImage(imagem, 0, 0);
+                JOptionPane.showMessageDialog(null, "Imagem aberta com sucesso!");
             } catch (FileNotFoundException e) {
-                mensagens.setText("Failed to save image: " + e);
+                JOptionPane.showMessageDialog(null, e);
             }
         }
+    }
+
+    public static void setStage(Stage stage){
+        primaryStage = stage;
     }
 }
