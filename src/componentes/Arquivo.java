@@ -43,6 +43,10 @@ public final class Arquivo {
         if (escolha != null) {
             try {
                 Image imagem = new Image(new FileInputStream(escolha));
+                if(imagem.getWidth() > areaDePintura.getCanvas().getWidth() || imagem.getHeight() > areaDePintura.getCanvas().getHeight()){
+                    areaDePintura.getCanvas().setWidth(imagem.getWidth());
+                    areaDePintura.getCanvas().setHeight(imagem.getHeight());
+                }
                 mensagens.setText("Imagem aberta com sucesso!");
                 areaDePintura.drawImage(imagem, 0, 0);
             } catch (FileNotFoundException e) {

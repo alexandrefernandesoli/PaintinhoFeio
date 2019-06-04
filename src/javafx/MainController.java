@@ -10,16 +10,12 @@ import componentes.UndoRedo;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Point2D;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import sun.plugin.com.Dispatch;
 
 public class MainController implements SeguraElementos {
     @FXML
@@ -34,8 +30,6 @@ public class MainController implements SeguraElementos {
     private AnchorPane fundo;
     @FXML
     private ColorPicker selecionaCor;
-    @FXML
-    private ChoiceBox selecionaFerramenta;
     @FXML
     private Slider slider;
     @FXML
