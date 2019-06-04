@@ -204,7 +204,7 @@ public class MainController implements SeguraElementos {
             btnUndo.setDisable(true);
         }
         if(i == 1){
-            btnRedo.setDisable(false);
+            btnRedo.setDisable(true);
             btnUndo.setDisable(false);
         }
         if(i == 2){
@@ -212,8 +212,8 @@ public class MainController implements SeguraElementos {
             btnRedo.setDisable(false);
         }
         if(i == 3){
-           btnUndo.setDisable(true);
-            btnRedo.setDisable(false);
+            btnUndo.setDisable(false);
+            btnRedo.setDisable(true);
         }
     }
     
