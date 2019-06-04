@@ -58,6 +58,7 @@
             <Insets bottom="5.0" />
          </BorderPane.margin>
         </VBox>
+        
     </top>
     <center>
         <AnchorPane fx:id="fundo" minHeight="500.0" minWidth="490.0" prefHeight="500.0" prefWidth="490.0" BorderPane.alignment="CENTER">
