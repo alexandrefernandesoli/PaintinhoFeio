@@ -11,24 +11,11 @@ import javafx.scene.input.MouseEvent;
 /**
  * @author Felipe Hiroshi
  */
-public class DesenhaRetangulo extends Forma implements Ferramentas {
-
-
-     @Override
-    public void clickDoMouse(GraphicsContext gc, MouseEvent event) {
-        coordenadas(event);
-    }
-
-    @Override
-    public void arrastoDoMouse(GraphicsContext gc, MouseEvent event) {
-        tamanho(event);
-    }
-
+public class DesenhaRetangulo extends Forma{
     @Override
     public void soltarClickMouse(GraphicsContext gc, MouseEvent event) {
         posicao(event);
         gc.fillRect(coordenadaX, coordenadaY, largura, altura);
         finaliza();
     }
-
 }
