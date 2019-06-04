@@ -39,6 +39,7 @@
             <ToggleButton fx:id="tbRetangulo" mnemonicParsing="false" text="Retangulo" toggleGroup="$ferramentas" />
             <ToggleButton fx:id="tbCirculo" mnemonicParsing="true" text="Circulo" toggleGroup="$ferramentas" />
             <ToggleButton fx:id="tbTexto" mnemonicParsing="false" text="Texto" toggleGroup="$ferramentas" />
+            <ToggleButton fx:id="tbBalde" mnemonicParsing="false" text="Balde" toggleGroup="$ferramentas" />
                 <HBox alignment="CENTER" spacing="5">
                <Button fx:id="btnUndo" mnemonicParsing="false" onAction="#clickUndo" text="Undo " />
                <Button fx:id="btnRedo" mnemonicParsing="false" onAction="#clickRedo" text="Redo" />

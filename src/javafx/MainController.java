@@ -56,6 +56,8 @@ public class MainController implements SeguraElementos {
     private ToggleButton tbTexto;
     @FXML 
     private ToggleButton tbReta;
+    @FXML 
+    private ToggleButton tbBalde;
     @FXML
     private TextField txtTexto;
     @FXML
@@ -122,6 +124,9 @@ public class MainController implements SeguraElementos {
                 texto.clickDoMouse(txtTexto, areaDePintura, event);
             } else if(tbReta.isSelected()){
                 reta.clickDoMouse(areaDePintura, event);
+            }
+            else if(tbBalde.isSelected()){
+                
             }
             undo = true;
         });
