@@ -20,12 +20,7 @@ import javafx.scene.paint.Color;
 public class MainController implements SeguraElementos {
     @FXML
     private Canvas tela;
-    @FXML
-    private Canvas telaUndo;
-    @FXML
     private GraphicsContext areaDePintura;
-    @FXML
-    private GraphicsContext areaDeUndo;
     @FXML
     private AnchorPane fundo;
     @FXML
@@ -48,9 +43,9 @@ public class MainController implements SeguraElementos {
     private ToggleButton tbCirculo;
     @FXML
     private ToggleButton tbTexto;
-    @FXML 
+    @FXML
     private ToggleButton tbReta;
-    @FXML 
+    @FXML
     private ToggleButton tbBalde;
     @FXML
     private TextField txtTexto;
@@ -58,26 +53,26 @@ public class MainController implements SeguraElementos {
     private Button btnUndo;
     @FXML
     private Button btnRedo;
-    
-    
-            
-    DesenhaCaneta caneta = new DesenhaCaneta();
-    DesenhaRetangulo retangulo = new DesenhaRetangulo();
-    DesenhaCirculo circulo = new DesenhaCirculo();
-    EscreveTexto texto = new EscreveTexto();
-    DesenhaReta reta = new DesenhaReta();
-    UndoRedo undoRedo = new UndoRedo();
-    boolean undo = false;
-    
+    @FXML
+    private Menu arquivosRecentes;
+
+
+    private DesenhaCaneta caneta = new DesenhaCaneta();
+    private DesenhaRetangulo retangulo = new DesenhaRetangulo();
+    private DesenhaCirculo circulo = new DesenhaCirculo();
+    private EscreveTexto texto = new EscreveTexto();
+    private DesenhaReta reta = new DesenhaReta();
+    private UndoRedo undoRedo = new UndoRedo();
+    private boolean undo = false;
+
     public void initialize() {
+        arquivosRecentes.getItems().add(new MenuItem("Arquivo exemplo"));
         areaDePintura = tela.getGraphicsContext2D();
-        areaDeUndo = telaUndo.getGraphicsContext2D();
         selecionaCor.setValue(Color.BLACK);
         slider.setShowTickMarks(true);
         txtTexto.setVisible(false);
-        telaUndo.setVisible(false);
         statesUndoRedo(0);
- 
+
         resize();
 
         areaDePintura.setLineWidth(2);
@@ -108,9 +103,8 @@ public class MainController implements SeguraElementos {
         tela.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
             txtTexto.setVisible(false);
             statesUndoRedo(1);
- 
-            if(undo)
-                undoRedo.copia(tela, telaUndo);
+
+            undoRedo.copia(tela);
             if (tbCaneta.isSelected()) {
                 caneta.clickDoMouse(areaDePintura, event);
             } else if (tbRetangulo.isSelected()) {
@@ -119,11 +113,10 @@ public class MainController implements SeguraElementos {
                 circulo.clickDoMouse(areaDePintura, event);
             } else if (tbTexto.isSelected()) {
                 texto.clickDoMouse(txtTexto, areaDePintura, event);
-            } else if(tbReta.isSelected()){
+            } else if (tbReta.isSelected()) {
                 reta.clickDoMouse(areaDePintura, event);
-            }
-            else if(tbBalde.isSelected()){
-                
+            } else if (tbBalde.isSelected()) {
+
             }
             undo = true;
         });
@@ -139,7 +132,7 @@ public class MainController implements SeguraElementos {
                 retangulo.arrastoDoMouse(areaDePintura, event);
             } else if (tbCirculo.isSelected()) {
                 circulo.arrastoDoMouse(areaDePintura, event);
-            } else if(tbReta.isSelected()){
+            } else if (tbReta.isSelected()) {
                 reta.arrastoDoMouse(areaDePintura, event);
             }
         });
@@ -147,17 +140,16 @@ public class MainController implements SeguraElementos {
         tela.addEventHandler(MouseEvent.MOUSE_RELEASED, (MouseEvent event) -> {
             if (tbCaneta.isSelected()) {
                 caneta.soltarClickMouse(areaDePintura, event);
-                //areaDeUndo.fillRect(event.getX(), event.getY(), 100, 100);
             } else if (tbRetangulo.isSelected()) {
                 retangulo.soltarClickMouse(areaDePintura, event);
             } else if (tbCirculo.isSelected()) {
                 circulo.soltarClickMouse(areaDePintura, event);
             } else if (tbTexto.isSelected()) {
                 texto.soltarClickMouse(txtTexto, areaDePintura, event);
-                
-            } else if(tbReta.isSelected()){
+
+            } else if (tbReta.isSelected()) {
                 reta.soltarClickMouse(areaDePintura, event);
-            } 
+            }
         });
     }
 
@@ -170,54 +162,52 @@ public class MainController implements SeguraElementos {
     public ToggleButton getSelecionado() {
         return (ToggleButton) ferramentas.getSelectedToggle();
     }
-    
+
     @FXML
-    public void clickUndo(ActionEvent event){
-        undoRedo.clickUndo(tela, telaUndo);
+    public void clickUndo() {
+        undoRedo.clickUndo(tela);
         statesUndoRedo(2);
     }
-    
+
     @FXML
-    public void clickRedo(ActionEvent event){
-        undoRedo.redo(tela, telaUndo);
+    public void clickRedo() {
+        undoRedo.redo(tela);
         statesUndoRedo(3);
     }
-    
-    public void resize(){
+
+    public void resize() {
         fundo.widthProperty().addListener((obs) -> {
             if (fundo.getWidth() > tela.getWidth()) {
                 tela.setWidth(fundo.getWidth());
-                telaUndo.setWidth(fundo.getWidth());
             }
         });
         fundo.heightProperty().addListener((obs) -> {
             if (fundo.getHeight() > tela.getHeight()) {
                 tela.setHeight(fundo.getHeight());
-                telaUndo.setHeight(fundo.getHeight());
             }
         });
     }
 
-    public void statesUndoRedo(int i){
-        if(i == 0){
+    public void statesUndoRedo(int i) {
+        if (i == 0) {
             btnRedo.setDisable(true);
             btnUndo.setDisable(true);
         }
-        if(i == 1){
+        if (i == 1) {
             btnRedo.setDisable(true);
             btnUndo.setDisable(false);
         }
-        if(i == 2){
+        if (i == 2) {
             btnUndo.setDisable(true);
             btnRedo.setDisable(false);
         }
-        if(i == 3){
+        if (i == 3) {
             btnUndo.setDisable(false);
             btnRedo.setDisable(true);
         }
     }
-    
-    
+
+
     public void onSave() {
         Arquivo.salvarArquivo(tela, mensagens);
     }

@@ -10,30 +10,24 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.WritableImage;
 
 /**
- *
  * @author Felipe Hiroshi
  */
 public class UndoRedo {
-    WritableImage imageRedo;
-    
-     public void copia(Canvas tela, Canvas telaUndo){
-        telaUndo.setVisible(true);
+    private WritableImage imageRedo;
+    private WritableImage image;
+
+    public void copia(Canvas tela) {
         SnapshotParameters params = new SnapshotParameters();
-        WritableImage image = tela.snapshot(params, null);
-        telaUndo.getGraphicsContext2D().drawImage(image, 0, 0);
-        telaUndo.setVisible(false);
+        image = tela.snapshot(params, null);
     }
-     
-    public void clickUndo(Canvas tela, Canvas telaUndo){
+
+    public void clickUndo(Canvas tela) {
         SnapshotParameters params = new SnapshotParameters();
         imageRedo = tela.snapshot(params, null);
-        telaUndo.setVisible(true);
-        WritableImage image = telaUndo.snapshot(params, null);
         tela.getGraphicsContext2D().drawImage(image, 0, 0);
-        telaUndo.setVisible(false);
     }
-    
-    public void redo(Canvas tela, Canvas telaUndo){
+
+    public void redo(Canvas tela) {
         tela.getGraphicsContext2D().drawImage(imageRedo, 0, 0);
     }
 }

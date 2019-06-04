@@ -9,7 +9,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 
 /**
- *
  * @author Felipe Hiroshi
  */
 abstract class Forma implements Ferramentas {
@@ -28,14 +27,14 @@ abstract class Forma implements Ferramentas {
         altura = Math.abs(event.getY() - coordenadaY);
     }
 
-    void posicao(MouseEvent event){
+    void posicao(MouseEvent event) {
         if (event.getX() < coordenadaX)
             coordenadaX = event.getX();
         if (event.getY() < coordenadaY)
             coordenadaY = event.getY();
     }
-    
-    void finaliza(){
+
+    void finaliza() {
         altura = 0;
         largura = 0;
     }
