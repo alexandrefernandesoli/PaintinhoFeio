@@ -82,7 +82,8 @@ public class MainController implements SeguraElementos {
         slider.setShowTickMarks(true);
         txtTexto.setVisible(false);
         telaUndo.setVisible(false);
-        
+        statesUndoRedo(0);
+ 
         resize();
 
         areaDePintura.setLineWidth(2);
@@ -112,6 +113,8 @@ public class MainController implements SeguraElementos {
 
         tela.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
             txtTexto.setVisible(false);
+            statesUndoRedo(1);
+ 
             if(undo)
                 undoRedo.copia(tela, telaUndo);
             if (tbCaneta.isSelected()) {
@@ -177,11 +180,13 @@ public class MainController implements SeguraElementos {
     @FXML
     public void clickUndo(ActionEvent event){
         undoRedo.clickUndo(tela, telaUndo);
+        statesUndoRedo(2);
     }
     
     @FXML
     public void clickRedo(ActionEvent event){
         undoRedo.redo(tela, telaUndo);
+        statesUndoRedo(3);
     }
     
     public void resize(){
@@ -198,6 +203,26 @@ public class MainController implements SeguraElementos {
             }
         });
     }
+
+    public void statesUndoRedo(int i){
+        if(i == 0){
+            btnRedo.setDisable(true);
+            btnUndo.setDisable(true);
+        }
+        if(i == 1){
+            btnRedo.setDisable(false);
+            btnUndo.setDisable(false);
+        }
+        if(i == 2){
+            btnUndo.setDisable(true);
+            btnRedo.setDisable(false);
+        }
+        if(i == 3){
+           btnUndo.setDisable(true);
+            btnRedo.setDisable(false);
+        }
+    }
+    
     
     public void onSave() {
         Arquivo.salvarArquivo(tela, mensagens);
