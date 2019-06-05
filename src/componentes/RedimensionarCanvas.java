@@ -1,24 +1,11 @@
 package componentes;
 
 import javafx.scene.canvas.Canvas;
+import javafx.stage.Stage;
 
-/**
- * @author Felipe Hiroshi
- */
-public class RedimensionarCanvas extends Canvas {
-
-    @Override
-    public boolean isResizable() {
-        return true;
-    }
-
-    @Override
-    public double prefWidth(double height) {
-        return getWidth();
-    }
-
-    @Override
-    public double prefHeight(double width) {
-        return getHeight();
+public class RedimensionarCanvas {
+    public static void redimensionaCanvas(Canvas tela, Stage primaryStage) {
+        tela.widthProperty().bind(primaryStage.widthProperty());
+        tela.heightProperty().bind(primaryStage.heightProperty());
     }
 }

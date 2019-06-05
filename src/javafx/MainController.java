@@ -11,6 +11,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import java.io.IOException;
+
 public class MainController implements SeguraElementos {
     @FXML
     private Canvas tela;
@@ -56,22 +58,20 @@ public class MainController implements SeguraElementos {
 
         configuraFerramentas();
         estadosDesfazer(0);
-        redimensionaCanvas();
         adicionaListeners();
 
         tela.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent evento) -> {
             estadosDesfazer(1);
             desfazerRefazer.copia(tela);
+            Arquivo.setArquivoSalvo(false);
             selecionaFerramenta.clickDoMouse(areaDePintura, this, evento);
         });
 
-        tela.addEventHandler(MouseEvent.MOUSE_DRAGGED, (MouseEvent evento) -> {
-            selecionaFerramenta.arrastoDoMouse(areaDePintura, this, evento);
-        });
+        tela.addEventHandler(MouseEvent.MOUSE_DRAGGED, (MouseEvent evento) ->
+                selecionaFerramenta.arrastoDoMouse(areaDePintura, this, evento));
 
-        tela.addEventHandler(MouseEvent.MOUSE_RELEASED, (MouseEvent evento) -> {
-            selecionaFerramenta.soltarClickMouse(areaDePintura, this, evento);
-        });
+        tela.addEventHandler(MouseEvent.MOUSE_RELEASED, (MouseEvent evento) ->
+                selecionaFerramenta.soltarClickMouse(areaDePintura, this, evento));
     }
 
     @FXML
@@ -89,21 +89,10 @@ public class MainController implements SeguraElementos {
     /**
      * Redimensiona o espaço de desenho conforme o tamanho da tela
      */
-    private void redimensionaCanvas() {
-        fundo.widthProperty().addListener((obs) -> {
-            if (fundo.getWidth() > tela.getWidth()) {
-                tela.setWidth(fundo.getWidth());
-            }
-        });
-        fundo.heightProperty().addListener((obs) -> {
-            if (fundo.getHeight() > tela.getHeight()) {
-                tela.setHeight(fundo.getHeight());
-            }
-        });
-    }
+
 
     private void estadosDesfazer(int estado) {
-        switch (estado){
+        switch (estado) {
             case 0:
                 btnRedo.setDisable(true);
                 btnUndo.setDisable(true);
@@ -140,9 +129,8 @@ public class MainController implements SeguraElementos {
             }
         });
 
-        slider.valueProperty().addListener((ActionEvent) -> {
-            tamanhoLabel.setText(String.format("%.0f", slider.getValue()));
-        });
+        slider.valueProperty().addListener((ActionEvent) ->
+                tamanhoLabel.setText(String.format("%.0f", slider.getValue())));
 
         ferramentas.selectedToggleProperty().addListener((obs, valorAntigo, valorNovo) -> {
             if (valorNovo == null)
@@ -159,6 +147,7 @@ public class MainController implements SeguraElementos {
         tbRetangulo.setUserData("retangulo");
         tbTexto.setUserData("texto");
 
+        Arquivo.setArquivoSalvo(true);
         areaDePintura = tela.getGraphicsContext2D();
         selecionaCor.setValue(Color.BLACK);
         slider.setShowTickMarks(true);
@@ -186,14 +175,38 @@ public class MainController implements SeguraElementos {
         return txtTexto;
     }
 
+    @FXML
     public void onSave() {
-        Arquivo.salvarArquivo(tela);
+        try {
+            Arquivo.salvarArquivo(tela);
+        } catch (IOException excecao) {
+            Excecoes.mensagemErro(excecao);
+        }
     }
 
+    @FXML
     public void onOpen() {
-        Arquivo.abrirArquivo(areaDePintura);
+        try {
+            Arquivo.abrirArquivo(areaDePintura);
+        } catch (IOException excecao) {
+            Excecoes.mensagemErro(excecao);
+        }
     }
 
+    @FXML
+    public void onRedimensionar() {
+        ChoiceDialog dialogoRedimensionamento = new ChoiceDialog("768x432", "896x504", "1024x768", "1280x720", "1920x1080");
+        dialogoRedimensionamento.setTitle("Redimensionar area de pintura");
+        dialogoRedimensionamento.setHeaderText("Escolha uma das opções de tamanho!");
+        dialogoRedimensionamento.setContentText("Tamanhos:");
+        dialogoRedimensionamento.showAndWait().ifPresent(opcao -> {
+            String[] tamanho = ((String) opcao).split("x");
+            tela.setWidth(Double.parseDouble(tamanho[0]));
+            tela.setHeight(Double.parseDouble(tamanho[1]));
+        });
+    }
+
+    @FXML
     public void onExit() {
         Platform.exit();
     }

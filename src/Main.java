@@ -1,4 +1,7 @@
 import componentes.Arquivo;
+import componentes.RedimensionarCanvas;
+import javafx.MainController;
+import javafx.SeguraElementos;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,14 +12,17 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("javafx/MainFXML.fxml"));
-        Arquivo.setStage(stage);
-        Scene scene = new Scene(root);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("javafx/MainFXML.fxml"));
+        Parent root = loader.load();
 
+        Arquivo.setStage(stage);
+
+        Scene scene = new Scene(root, 896, 504);
+
+        stage.setMinWidth(896);
+        stage.setMinHeight(504);
         stage.setScene(scene);
         stage.setTitle("Paintinho Feio");
-        stage.setMinHeight(700);
-        stage.setMinWidth(800);
         stage.show();
     }
 
