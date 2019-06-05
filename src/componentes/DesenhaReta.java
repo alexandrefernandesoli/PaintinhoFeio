@@ -9,31 +9,26 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 
 /**
- *
  * @author Felipe Hiroshi
  */
-public class DesenhaReta implements Ferramentas{
-    double x1;
-    double y1;
-    double x2;
-    double y2;
-    
+public class DesenhaReta implements Ferramentas {
+    private double x;
+    private double y;
+
     @Override
     public void clickDoMouse(GraphicsContext gc, MouseEvent event) {
-        x1 = event.getX();
-        y1 = event.getY();
+        x = event.getX();
+        y = event.getY();
     }
 
     @Override
     public void arrastoDoMouse(GraphicsContext gc, MouseEvent event) {
-      
+
     }
 
     @Override
     public void soltarClickMouse(GraphicsContext gc, MouseEvent event) {
-        x2 = event.getX();
-        y2 = event.getY();
-        gc.strokeLine(x1, y1, x2, y2);
+        gc.strokeLine(x, y, event.getX(), event.getY());
     }
-    
+
 }
