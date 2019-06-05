@@ -10,7 +10,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.WritableImage;
 
 /**
- * @author Felipe Hiroshi
+ * Antes do usuário desenhar é registrado uma imagem do canvas para que 
+ * quando for fazer o undo tenha a imagem de volta.
+ * O Redo só ocorre quando é feito o undo, com isso a imageRedo é a imagem antes
+ * de ser feito o undo.
  */
 public class DesfazerRefazer {
     private WritableImage imageRedo;
