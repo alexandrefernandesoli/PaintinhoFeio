@@ -5,7 +5,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
 /**
- * @author Felipe Hiroshi
+*Coloca textField como visible na posição do mouse onde o usuário clicou,
+* pega o texto e escreve.
+* Despois seta textField como invisível e limpa o seu campo de texto
+* 
  */
 class EscreveTexto {
     private double coordenadaX;
