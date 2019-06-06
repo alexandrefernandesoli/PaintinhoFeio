@@ -11,7 +11,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainController implements SeguraElementos {
     @FXML
@@ -51,6 +54,14 @@ public class MainController implements SeguraElementos {
     private DesfazerRefazer desfazerRefazer = new DesfazerRefazer();
 
     public void initialize() {
+        Map<String, File> teste = new HashMap<>();
+        teste.put("asd", new File("teste.txt"));
+
+        try{
+            Arquivo.criaArquivosRecentes(teste);
+        }catch (IOException excecao){
+            Excecoes.mensagemErro(excecao);
+        }
         SelecionaFerramenta selecionaFerramenta = new SelecionaFerramenta();
         arquivosRecentes.getItems().add(new MenuItem("Arquivo exemplo"));
         configuraFerramentas();
@@ -58,6 +69,7 @@ public class MainController implements SeguraElementos {
         adicionaListeners();
 
         tela.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent evento) -> {
+            txtTexto.setVisible(false);
             estadosDesfazer(1);
             desfazerRefazer.copia(tela);
             Arquivo.setArquivoSalvo(false);

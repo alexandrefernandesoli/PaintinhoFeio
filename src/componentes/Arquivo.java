@@ -1,5 +1,6 @@
 package componentes;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -11,15 +12,20 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Map;
+import java.util.Properties;
 
 public class Arquivo {
+    public final static String CAMINHO_ARQUIVOS_RECENTES = System.getProperty("user.home")+"/PaintinhoFeio";
+
+    private static String ultimoDiretorioVisitado = System.getProperty("user.home");
     private static Stage primaryStage;
     private static boolean arquivoSalvo;
     private static File arquivoAtual;
+    private static File arquivoSalvaRecentes;
+    private static FileOutputStream saida;
+    private static Properties propriedadesRecentes;
     private static Map<String, File> arquivosRecentes;
 
     public static void salvarArquivo(Canvas tela) throws IOException {
@@ -33,12 +39,15 @@ public class Arquivo {
             }
             salvaArquivo.setInitialFileName("Sem título");
             salvaArquivo.setTitle("Salvar imagem");
+            salvaArquivo.setInitialDirectory(new File(ultimoDiretorioVisitado));
             arquivoAtual = salvaArquivo.showSaveDialog(primaryStage);
 
             if (arquivoAtual != null) {
                 Image snapshot = tela.snapshot(null, null);
                 ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", arquivoAtual);
                 arquivoSalvo = true;
+
+                ultimoDiretorioVisitado = arquivoAtual.getParent();
             }
         } else {
             Image snapshot = tela.snapshot(null, null);
@@ -56,6 +65,8 @@ public class Arquivo {
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Arquivo de imagem", "*.png", "*.jpeg", "*.jpg", "*.gif");
             escolheArquivo.getExtensionFilters().add(extFilter);
             escolheArquivo.setTitle("Abrir imagem");
+
+            escolheArquivo.setInitialDirectory(new File(ultimoDiretorioVisitado));
             arquivoAtual = escolheArquivo.showOpenDialog(primaryStage);
 
             if (arquivoAtual != null) {
@@ -65,6 +76,8 @@ public class Arquivo {
                 areaDePintura.getCanvas().setWidth(imagem.getWidth());
                 areaDePintura.getCanvas().setHeight(imagem.getHeight());
                 areaDePintura.drawImage(imagem, 0, 0);
+
+                ultimoDiretorioVisitado = arquivoAtual.getParent();
             }
         } else {
             Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
@@ -99,26 +112,21 @@ public class Arquivo {
             trocaNomeStage();
     }
 
-    public static void criaArquivosRecentes() {
-        try {
-            File path = new File(System.getProperty("user.home") + "\\PaintinhoFeio");
+    public static void criaArquivosRecentes(Map<String, File> arquivosParaSalvar) throws IOException{
+        File path = new File(CAMINHO_ARQUIVOS_RECENTES);
 
-            if (!path.exists()) {
-                path.mkdirs();
-            }
+        if(!path.exists())
+            path.mkdir();
 
-            File arquivosRecentesTXT = new File(path.getAbsolutePath() + "\\arquivos_recentes.txt");
+        arquivoSalvaRecentes = new File(CAMINHO_ARQUIVOS_RECENTES + "/recentes.txt");
 
-            if (!arquivosRecentesTXT.exists()) {
-                arquivosRecentesTXT.createNewFile();
-            }
-        } catch (IOException exececao) {
-            Excecoes.mensagemErro(exececao);
+        if(!arquivoSalvaRecentes.exists()){
+            arquivoSalvaRecentes.createNewFile();
         }
     }
 
     private static void atualizaArquivosRecentes() {
-        if(arquivoAtual != null){
+        if (arquivoAtual != null) {
             arquivosRecentes.put(arquivoAtual.getAbsolutePath(), arquivoAtual);
         }
     }

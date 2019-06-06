@@ -5,6 +5,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Main extends Application {
 
     @Override
@@ -13,7 +17,7 @@ public class Main extends Application {
         Parent root = loader.load();
 
         Arquivo.setStage(stage);
-        Arquivo.criaArquivosRecentes();
+
 
         Scene scene = new Scene(root, 896, 504);
 
