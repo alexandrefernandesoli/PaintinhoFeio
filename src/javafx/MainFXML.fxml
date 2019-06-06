@@ -55,8 +55,8 @@
                     <Label fx:id="tamanhoLabel" maxWidth="20.0" minWidth="20.0" text="2"/>
                 </HBox>
                 <Line endX="-53" endY="-7" startX="-53" startY="-36" stroke="#9e9c9c" strokeLineCap="ROUND"/>
-                <Button fx:id="btnUndo" mnemonicParsing="false" onAction="#clickUndo" text="Undo "/>
-                <Button fx:id="btnRedo" mnemonicParsing="false" onAction="#clickRedo" text="Redo"/>
+                <Button fx:id="btnUndo" mnemonicParsing="false" onAction="#clickUndo" text="Desfazer"/>
+                <Button fx:id="btnRedo" mnemonicParsing="false" onAction="#clickRedo" text="Refazer"/>
                 <VBox.margin>
                     <Insets/>
                 </VBox.margin>

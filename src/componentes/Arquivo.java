@@ -1,6 +1,5 @@
 package componentes;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -13,20 +12,18 @@ import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
 import java.io.*;
-import java.util.Map;
-import java.util.Properties;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 public class Arquivo {
-    public final static String CAMINHO_ARQUIVOS_RECENTES = System.getProperty("user.home")+"/PaintinhoFeio";
-
+    private final static String CAMINHO_ARQUIVOS_RECENTES = System.getProperty("user.home") + "/PaintinhoFeio";
     private static String ultimoDiretorioVisitado = System.getProperty("user.home");
     private static Stage primaryStage;
     private static boolean arquivoSalvo;
     private static File arquivoAtual;
     private static File arquivoSalvaRecentes;
     private static FileOutputStream saida;
-    private static Properties propriedadesRecentes;
-    private static Map<String, File> arquivosRecentes;
+    private static Queue<File> arquivosRecentes = new ArrayDeque<>();
 
     public static void salvarArquivo(Canvas tela) throws IOException {
         if (arquivoAtual == null) {
@@ -48,6 +45,7 @@ public class Arquivo {
                 arquivoSalvo = true;
 
                 ultimoDiretorioVisitado = arquivoAtual.getParent();
+                atualizaArquivosRecentes();
             }
         } else {
             Image snapshot = tela.snapshot(null, null);
@@ -70,14 +68,10 @@ public class Arquivo {
             arquivoAtual = escolheArquivo.showOpenDialog(primaryStage);
 
             if (arquivoAtual != null) {
-                System.out.println(arquivoAtual.getAbsolutePath());
-                Image imagem = new Image(new FileInputStream(arquivoAtual));
-
-                areaDePintura.getCanvas().setWidth(imagem.getWidth());
-                areaDePintura.getCanvas().setHeight(imagem.getHeight());
-                areaDePintura.drawImage(imagem, 0, 0);
+                abrirArquivoRealmente(arquivoAtual, areaDePintura);
 
                 ultimoDiretorioVisitado = arquivoAtual.getParent();
+                atualizaArquivosRecentes();
             }
         } else {
             Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
@@ -112,22 +106,54 @@ public class Arquivo {
             trocaNomeStage();
     }
 
-    public static void criaArquivosRecentes(Map<String, File> arquivosParaSalvar) throws IOException{
+    public static void abrirArquivoRealmente(File arquivo, GraphicsContext areaDePintura) throws FileNotFoundException {
+        Image imagem = new Image(new FileInputStream(arquivo));
+
+        areaDePintura.getCanvas().setWidth(imagem.getWidth());
+        areaDePintura.getCanvas().setHeight(imagem.getHeight());
+        areaDePintura.drawImage(imagem, 0, 0);
+    }
+
+    public static void criaArquivosRecentes() throws IOException {
         File path = new File(CAMINHO_ARQUIVOS_RECENTES);
 
-        if(!path.exists())
+        if (!path.exists())
             path.mkdir();
 
         arquivoSalvaRecentes = new File(CAMINHO_ARQUIVOS_RECENTES + "/recentes.txt");
 
-        if(!arquivoSalvaRecentes.exists()){
+        if (!arquivoSalvaRecentes.exists()) {
             arquivoSalvaRecentes.createNewFile();
+        } else {
+            FileReader ler = new FileReader(arquivoSalvaRecentes);
+            BufferedReader bfLer = new BufferedReader(ler);
+            String linha = bfLer.readLine();
+            while (linha != null) {
+                arquivosRecentes.add(new File(linha));
+                System.out.println(linha);
+                linha = bfLer.readLine();
+            }
         }
     }
 
     private static void atualizaArquivosRecentes() {
-        if (arquivoAtual != null) {
-            arquivosRecentes.put(arquivoAtual.getAbsolutePath(), arquivoAtual);
+        if(!arquivosRecentes.contains(arquivoAtual))
+            arquivosRecentes.add(arquivoAtual);
+
+        if (arquivosRecentes.size() > 3)
+            arquivosRecentes.remove();
+
+        try {
+            saida = new FileOutputStream(arquivoSalvaRecentes);
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(saida));
+
+            for (File arquivo : arquivosRecentes) {
+                bw.write(arquivo.getAbsolutePath());
+                bw.newLine();
+            }
+            bw.close();
+        } catch (IOException excexao) {
+            Excecoes.mensagemErro(excexao);
         }
     }
 
@@ -141,5 +167,9 @@ public class Arquivo {
 
     public static void setStage(Stage stage) {
         primaryStage = stage;
+    }
+
+    public static Queue<File> getArquivosRecentes() {
+        return arquivosRecentes;
     }
 }

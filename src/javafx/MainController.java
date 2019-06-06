@@ -12,9 +12,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
 
 public class MainController implements SeguraElementos {
     @FXML
@@ -51,19 +53,17 @@ public class MainController implements SeguraElementos {
     @FXML
     private Menu arquivosRecentes;
 
+    private Queue<File> filaArquivosRecentes;
     private DesfazerRefazer desfazerRefazer = new DesfazerRefazer();
 
     public void initialize() {
-        Map<String, File> teste = new HashMap<>();
-        teste.put("asd", new File("teste.txt"));
-
         try{
-            Arquivo.criaArquivosRecentes(teste);
+            Arquivo.criaArquivosRecentes();
+            atualizaMenuRecentes();
         }catch (IOException excecao){
             Excecoes.mensagemErro(excecao);
         }
         SelecionaFerramenta selecionaFerramenta = new SelecionaFerramenta();
-        arquivosRecentes.getItems().add(new MenuItem("Arquivo exemplo"));
         configuraFerramentas();
         estadosDesfazer(0);
         adicionaListeners();
@@ -81,6 +81,23 @@ public class MainController implements SeguraElementos {
 
         tela.addEventHandler(MouseEvent.MOUSE_RELEASED, (MouseEvent evento) ->
                 selecionaFerramenta.soltarClickMouse(areaDePintura, this, evento));
+    }
+
+    private void atualizaMenuRecentes(){
+        filaArquivosRecentes = Arquivo.getArquivosRecentes();
+        arquivosRecentes.getItems().clear();
+
+        for(File arquivo: filaArquivosRecentes){
+            MenuItem arquivoRecente =  new MenuItem(arquivo.getName());
+            arquivoRecente.setOnAction(acao ->{
+                try{
+                    Arquivo.abrirArquivoRealmente(arquivo, areaDePintura);
+                }catch (FileNotFoundException excecao){
+                    Excecoes.mensagemErro(excecao);
+                }
+            });
+            arquivosRecentes.getItems().add(arquivoRecente);
+        }
     }
 
     @FXML
@@ -184,24 +201,37 @@ public class MainController implements SeguraElementos {
         return txtTexto;
     }
 
+    /**
+     * Chama método salvar arquivo na classe Arquivo
+     * Atualiza lista de arquivos recentes
+     */
     @FXML
     public void onSave() {
         try {
             Arquivo.salvarArquivo(tela);
+            atualizaMenuRecentes();
         } catch (IOException excecao) {
             Excecoes.mensagemErro(excecao);
         }
     }
 
+    /**
+     * Chama método abrir arquivo na classe Arquivo
+     * Atualiza lista de arquivos recentes
+     */
     @FXML
     public void onOpen() {
         try {
             Arquivo.abrirArquivo(areaDePintura);
+            atualizaMenuRecentes();
         } catch (IOException excecao) {
             Excecoes.mensagemErro(excecao);
         }
     }
 
+    /**
+     * Abre diálogo de redimensionamento com escolhas para o usuario
+     */
     @FXML
     public void onRedimensionar() {
         ChoiceDialog dialogoRedimensionamento = new ChoiceDialog("768x432", "896x504", "1024x768", "1280x720", "1920x1080");
