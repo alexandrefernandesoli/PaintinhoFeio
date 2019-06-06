@@ -14,21 +14,24 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Map;
 
 public class Arquivo {
     private static Stage primaryStage;
     private static boolean arquivoSalvo;
     private static File arquivoAtual;
+    private static Map<String, File> arquivosRecentes;
 
     public static void salvarArquivo(Canvas tela) throws IOException {
-        if(arquivoAtual == null) {
+        if (arquivoAtual == null) {
             FileChooser salvaArquivo = new FileChooser();
             String[] extensoes = {"png", "jpg", "gif"};
             for (String extensao : extensoes) {
-                FileChooser.ExtensionFilter filtro = new FileChooser.ExtensionFilter("Arquivo " +
-                        extensao.toUpperCase() + " (*." + extensao + ")", "*." + extensao);
+                FileChooser.ExtensionFilter filtro = new FileChooser.ExtensionFilter(extensao.toUpperCase() +
+                        " (*." + extensao + ")", "*." + extensao);
                 salvaArquivo.getExtensionFilters().add(filtro);
             }
+            salvaArquivo.setInitialFileName("Sem título");
             salvaArquivo.setTitle("Salvar imagem");
             arquivoAtual = salvaArquivo.showSaveDialog(primaryStage);
 
@@ -37,16 +40,18 @@ public class Arquivo {
                 ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", arquivoAtual);
                 arquivoSalvo = true;
             }
-        }else {
+        } else {
             Image snapshot = tela.snapshot(null, null);
             ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", arquivoAtual);
             arquivoSalvo = true;
         }
-        trocaNomeStage();
+
+        if (arquivoAtual != null)
+            trocaNomeStage();
     }
 
-    public static void abrirArquivo(GraphicsContext areaDePintura) throws IOException{
-        if(arquivoSalvo){
+    public static void abrirArquivo(GraphicsContext areaDePintura) throws IOException {
+        if (arquivoSalvo) {
             FileChooser escolheArquivo = new FileChooser();
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Arquivo de imagem", "*.png", "*.jpeg", "*.jpg", "*.gif");
             escolheArquivo.getExtensionFilters().add(extFilter);
@@ -54,13 +59,14 @@ public class Arquivo {
             arquivoAtual = escolheArquivo.showOpenDialog(primaryStage);
 
             if (arquivoAtual != null) {
+                System.out.println(arquivoAtual.getAbsolutePath());
                 Image imagem = new Image(new FileInputStream(arquivoAtual));
 
                 areaDePintura.getCanvas().setWidth(imagem.getWidth());
                 areaDePintura.getCanvas().setHeight(imagem.getHeight());
                 areaDePintura.drawImage(imagem, 0, 0);
             }
-        }else{
+        } else {
             Alert dialogoExe = new Alert(Alert.AlertType.CONFIRMATION);
             ButtonType btnSalvar = new ButtonType("Salvar");
             ButtonType btnDescartar = new ButtonType("Descartar");
@@ -72,38 +78,60 @@ public class Arquivo {
             dialogoExe.setContentText("Deseja descartar as alterações ou salvar?");
 
 
-            dialogoExe.showAndWait().ifPresent(acao ->{
-                if(acao == btnSalvar){
-                    try{
+            dialogoExe.showAndWait().ifPresent(acao -> {
+                if (acao == btnSalvar) {
+                    try {
                         salvarArquivo(areaDePintura.getCanvas());
-                    }catch (IOException excecao){
+                    } catch (IOException excecao) {
                         Excecoes.mensagemErro(excecao);
                     }
-                }else if(acao == btnDescartar){
+                } else if (acao == btnDescartar) {
                     arquivoSalvo = true;
-                    try{
+                    try {
                         abrirArquivo(areaDePintura);
-                    }catch (IOException excecao){
+                    } catch (IOException excecao) {
                         Excecoes.mensagemErro(excecao);
                     }
                 }
             });
         }
-        if(arquivoAtual != null)
+        if (arquivoAtual != null)
             trocaNomeStage();
     }
 
-    private static void trocaNomeStage(){
+    public static void criaArquivosRecentes() {
+        try {
+            File path = new File(System.getProperty("user.home") + "\\PaintinhoFeio");
+
+            if (!path.exists()) {
+                path.mkdirs();
+            }
+
+            File arquivosRecentesTXT = new File(path.getAbsolutePath() + "\\arquivos_recentes.txt");
+
+            if (!arquivosRecentesTXT.exists()) {
+                arquivosRecentesTXT.createNewFile();
+            }
+        } catch (IOException exececao) {
+            Excecoes.mensagemErro(exececao);
+        }
+    }
+
+    private static void atualizaArquivosRecentes() {
+        if(arquivoAtual != null){
+            arquivosRecentes.put(arquivoAtual.getAbsolutePath(), arquivoAtual);
+        }
+    }
+
+    private static void trocaNomeStage() {
         primaryStage.setTitle("Paintinho Feio - " + arquivoAtual.getName());
     }
 
-    public static void setArquivoSalvo(boolean estado){
+    public static void setArquivoSalvo(boolean estado) {
         arquivoSalvo = estado;
     }
+
     public static void setStage(Stage stage) {
         primaryStage = stage;
-    }
-    public static Stage getPrimaryStage(){
-        return primaryStage;
     }
 }

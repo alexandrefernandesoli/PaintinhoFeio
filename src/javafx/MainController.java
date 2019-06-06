@@ -18,8 +18,6 @@ public class MainController implements SeguraElementos {
     private Canvas tela;
     private GraphicsContext areaDePintura;
     @FXML
-    private AnchorPane fundo;
-    @FXML
     private ColorPicker selecionaCor;
     @FXML
     private Slider slider;
@@ -55,7 +53,6 @@ public class MainController implements SeguraElementos {
     public void initialize() {
         SelecionaFerramenta selecionaFerramenta = new SelecionaFerramenta();
         arquivosRecentes.getItems().add(new MenuItem("Arquivo exemplo"));
-
         configuraFerramentas();
         estadosDesfazer(0);
         adicionaListeners();

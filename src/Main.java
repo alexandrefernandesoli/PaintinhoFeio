@@ -1,7 +1,4 @@
 import componentes.Arquivo;
-import componentes.RedimensionarCanvas;
-import javafx.MainController;
-import javafx.SeguraElementos;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,6 +13,7 @@ public class Main extends Application {
         Parent root = loader.load();
 
         Arquivo.setStage(stage);
+        Arquivo.criaArquivosRecentes();
 
         Scene scene = new Scene(root, 896, 504);
 

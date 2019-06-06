@@ -21,48 +21,48 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
-<BorderPane id="borderPane" prefHeight="504.0" prefWidth="896.0" stylesheets="/recursos/Estilo.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx.MainController">
+<BorderPane id="borderPane" prefHeight="504.0" prefWidth="896.0" stylesheets="/recursos/Estilo.css"
+            xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="javafx.MainController">
     <top>
         <VBox maxHeight="60.0" minHeight="60">
             <MenuBar minHeight="25.0" prefHeight="25.0">
                 <Menu text="Arquivo">
-                    <MenuItem onAction="#onSave" text="Salvar imagem" />
-                    <MenuItem onAction="#onOpen" text="Abrir imagem" />
-                    <MenuItem onAction="#onExit" text="Sair" />
+                    <MenuItem onAction="#onSave" text="Salvar"/>
+                    <MenuItem onAction="#onOpen" text="Abrir"/>
+                    <MenuItem onAction="#onExit" text="Sair"/>
                 </Menu>
-                <Menu fx:id="arquivosRecentes" text="Arquivos recentes..." />
-            <Menu fx:id="opcoes" text="Opções">
-               <items>
-                  <MenuItem onAction="#onRedimensionar" text="Redimensionar area de pintura" />
-               </items>
-            </Menu>
+                <Menu fx:id="arquivosRecentes" text="Arquivos recentes..."/>
+                <Menu text="Opções">
+                    <MenuItem onAction="#onRedimensionar" text="Redimensionar area de pintura"/>
+                </Menu>
             </MenuBar>
             <ToolBar>
                 <ToggleButton fx:id="tbCaneta" mnemonicParsing="false" selected="true" text="Caneta">
                     <toggleGroup>
-                        <ToggleGroup fx:id="ferramentas" />
+                        <ToggleGroup fx:id="ferramentas"/>
                     </toggleGroup>
                 </ToggleButton>
-                <ToggleButton fx:id="tbBorracha" mnemonicParsing="false" text="Borracha" toggleGroup="$ferramentas" />
-                <ToggleButton fx:id="tbReta" mnemonicParsing="false" text="Reta" toggleGroup="$ferramentas" />
-                <ToggleButton fx:id="tbRetangulo" mnemonicParsing="false" text="Retangulo" toggleGroup="$ferramentas" />
-                <ToggleButton fx:id="tbCirculo" mnemonicParsing="false" text="Circulo" toggleGroup="$ferramentas" />
-                <ToggleButton fx:id="tbTexto" mnemonicParsing="false" text="Texto" toggleGroup="$ferramentas" />
-                <ToggleButton fx:id="tbBalde" mnemonicParsing="false" text="Balde" toggleGroup="$ferramentas" />
+                <ToggleButton fx:id="tbBorracha" mnemonicParsing="false" text="Borracha" toggleGroup="$ferramentas"/>
+                <ToggleButton fx:id="tbReta" mnemonicParsing="false" text="Reta" toggleGroup="$ferramentas"/>
+                <ToggleButton fx:id="tbRetangulo" mnemonicParsing="false" text="Retangulo" toggleGroup="$ferramentas"/>
+                <ToggleButton fx:id="tbCirculo" mnemonicParsing="false" text="Circulo" toggleGroup="$ferramentas"/>
+                <ToggleButton fx:id="tbTexto" mnemonicParsing="false" text="Texto" toggleGroup="$ferramentas"/>
+                <ToggleButton fx:id="tbBalde" mnemonicParsing="false" text="Balde" toggleGroup="$ferramentas"/>
                 <HBox alignment="CENTER" spacing="5.0">
-                    <ColorPicker fx:id="selecionaCor" />
-                    <Slider fx:id="slider" min="1.0" prefWidth="98.0" value="2" />
-                    <Label fx:id="tamanhoLabel" maxWidth="20.0" minWidth="20.0" text="2" />
+                    <ColorPicker fx:id="selecionaCor"/>
+                    <Slider fx:id="slider" min="1.0" prefWidth="98.0" value="2"/>
+                    <Label fx:id="tamanhoLabel" maxWidth="20.0" minWidth="20.0" text="2"/>
                 </HBox>
-                <Line endX="-53" endY="-7" startX="-53" startY="-36" stroke="#9e9c9c" strokeLineCap="ROUND" />
-                <Button fx:id="btnUndo" mnemonicParsing="false" onAction="#clickUndo" text="Undo " />
-                <Button fx:id="btnRedo" mnemonicParsing="false" onAction="#clickRedo" text="Redo" />
+                <Line endX="-53" endY="-7" startX="-53" startY="-36" stroke="#9e9c9c" strokeLineCap="ROUND"/>
+                <Button fx:id="btnUndo" mnemonicParsing="false" onAction="#clickUndo" text="Undo "/>
+                <Button fx:id="btnRedo" mnemonicParsing="false" onAction="#clickRedo" text="Redo"/>
                 <VBox.margin>
-                    <Insets />
+                    <Insets/>
                 </VBox.margin>
             </ToolBar>
             <BorderPane.margin>
-                <Insets bottom="5.0" />
+                <Insets bottom="5.0"/>
             </BorderPane.margin>
         </VBox>
 
@@ -74,10 +74,10 @@
                     <children>
                         <Canvas fx:id="tela" height="504.0" width="896.0">
                             <cursor>
-                                <Cursor fx:constant="CROSSHAIR" />
+                                <Cursor fx:constant="CROSSHAIR"/>
                             </cursor>
                         </Canvas>
-                        <TextField fx:id="txtTexto" alignment="TOP_LEFT" promptText="Digite o texto" />
+                        <TextField fx:id="txtTexto" alignment="TOP_LEFT" promptText="Digite o texto"/>
                     </children>
                 </Pane>
             </content>
