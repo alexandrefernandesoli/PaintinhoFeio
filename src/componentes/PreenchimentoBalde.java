@@ -76,17 +76,17 @@ public class PreenchimentoBalde implements Ferramentas {
                 final int[] deslocamentos = {-1, 0, 1};
                 for (int i : deslocamentos) {
                     for (int j : deslocamentos) {
-
                         Point vizinho = new Point(pixel.x + i, pixel.y + j);
-                        Color corDoVizinho = pixelReader.getColor(vizinho.x, vizinho.y);
 
                         if (0.0 <= vizinho.getX() && vizinho.getX() < capturaDoCanvas.getWidth() &&
-                            0.0 <= vizinho.getY() && vizinho.getY() < capturaDoCanvas.getHeight())
+                            0.0 <= vizinho.getY() && vizinho.getY() < capturaDoCanvas.getHeight()){
 
+                            Color corDoVizinho = pixelReader.getColor(vizinho.x, vizinho.y);
                             if (coresIguais(corDoVizinho, corAntiga)) {
                                 pixelWriter.setColor(vizinho.x, vizinho.y, corNova);
                                 filaDePontos.add(vizinho);
                             }
+                        }
                     }
                 }
             }
