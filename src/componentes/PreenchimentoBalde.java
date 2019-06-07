@@ -3,7 +3,6 @@ package componentes;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Stack;
 import javafx.concurrent.Task;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,7 +11,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+
 
 public class PreenchimentoBalde implements Ferramentas {
 
@@ -32,12 +31,12 @@ public class PreenchimentoBalde implements Ferramentas {
 
     @Override
     public void arrastoDoMouse(GraphicsContext gc, MouseEvent event) {
-        throw new UnsupportedOperationException("Não implementado.");
+
     }
 
     @Override
     public void soltarClickMouse(GraphicsContext gc, MouseEvent event) {
-        throw new UnsupportedOperationException("Não implementado.");
+
     }
 
     private class FloodFill extends Task<Void> {
@@ -70,10 +69,6 @@ public class PreenchimentoBalde implements Ferramentas {
                 if (!(pixel.getX() < 0.0f || pixel.getX() >= canvasSnapshot.getWidth() ||
                         pixel.getY() < 0.0f || pixel.getY() >= canvasSnapshot.getHeight())) {
 
-                    Color corDoPixel = pixelReader.getColor((int) pixel.getX(), (int) pixel.getY());
-//                    if (corDoPixel.equals(corNova))
-//                        continue;
-
                     final int[] deslocamentos = {-1, 1};
                     for (int i : deslocamentos) {
                         for (int j : deslocamentos) {
@@ -92,9 +87,5 @@ public class PreenchimentoBalde implements Ferramentas {
 
             return null;
         }
-
-//        private void pintaPixel(Point pixel, PixelReader pixelReader, PixelWriter pixelWriter, Color corNova) {           
-//
-//        }
     }
 }
