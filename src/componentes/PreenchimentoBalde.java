@@ -52,7 +52,7 @@ public class PreenchimentoBalde implements Ferramentas {
         }
 
         @Override
-        protected Void call() throws Exception {
+        protected Void call(){
             PixelReader pixelReader = canvasSnapshot.getPixelReader();
             PixelWriter pixelWriter = canvasSnapshot.getPixelWriter();
             Color corAntiga = pixelReader.getColor((int) ponto.getX(), (int) ponto.getY());
