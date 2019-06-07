@@ -1,18 +1,33 @@
 package componentes;
 
+import java.awt.Point;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+import javafx.concurrent.Task;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 public class PreenchimentoBalde implements Ferramentas {
 
     @Override
     public void clickDoMouse(GraphicsContext gc, MouseEvent event) {
-        Paint corAntiga = gc.getFill();
-//        Paint corNova = event.
+        Canvas canvas = gc.getCanvas();
+        WritableImage capturaDoCanvas = canvas.snapshot(null, 
+                new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight()));
 
-//          = event.getX();
-//          = event.getY();
+        Color corAntiga = (Color) gc.getFill();
+        Point ponto = new Point((int) event.getX(), (int) event.getY());
+
+        Task<Void> task = new FloodFill(capturaDoCanvas, corAntiga, ponto);
+        task.setOnSucceeded(successEvent -> gc.drawImage(capturaDoCanvas, 0, 0));
+        new Thread(task).start();
     }
 
     @Override
@@ -24,34 +39,62 @@ public class PreenchimentoBalde implements Ferramentas {
     public void soltarClickMouse(GraphicsContext gc, MouseEvent event) {
         throw new UnsupportedOperationException("Não implementado.");
     }
+
+    private class FloodFill extends Task<Void> {
+
+        private final WritableImage canvasSnapshot;
+        private final Point ponto;
+        private final Color corAntiga;
+
+        private FloodFill(WritableImage capturaDoCanvas, Color corAntiga, Point ponto) {
+            this.canvasSnapshot = capturaDoCanvas;
+            this.corAntiga = corAntiga;
+            this.ponto = ponto;
+        }
+
+        @Override
+        protected Void call() throws Exception {
+            PixelReader pixelReader = canvasSnapshot.getPixelReader();
+            PixelWriter pixelWriter = canvasSnapshot.getPixelWriter();
+            Color corNova = pixelReader.getColor((int) ponto.getX(), (int) ponto.getY());
+
+            if (corNova.equals(corAntiga) /*|| !corNova.equals(corDoPixel)*/)
+                return null;
+
+            Queue<Point> fila = new LinkedList<>();
+            fila.add(ponto);
+
+            while (!fila.isEmpty()) {
+
+                Point pixel = fila.poll();
+                if (!(pixel.getX() < 0.0f || pixel.getX() >= canvasSnapshot.getWidth() ||
+                        pixel.getY() < 0.0f || pixel.getY() >= canvasSnapshot.getHeight())) {
+
+                    Color corDoPixel = pixelReader.getColor((int) pixel.getX(), (int) pixel.getY());
+                    if (corDoPixel.equals(corNova))
+                        continue;
+
+                    final int[] deslocamentos = {-1, 1};
+                    for (int i : deslocamentos) {
+                        for (int j : deslocamentos) {
+
+                            Point vizinho = new Point((int) pixel.getX() + i, (int) pixel.getY() + j);
+                            Color corDoVizinho = pixelReader.getColor((int) vizinho.getX(), (int) vizinho.getY());
+
+                            if (corDoVizinho.equals(corAntiga)) {
+                                pixelWriter.setColor((int) vizinho.getX(), (int) vizinho.getY(), corNova);
+                                fila.add(vizinho);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+//        private void pintaPixel(Point pixel, PixelReader pixelReader, PixelWriter pixelWriter, Color corNova) {           
+//
+//        }
+    }
 }
-
-/*
-Flood-fill (node, target-color, replacement-color) {
-	if (target-color is equal to replacement-color)
-		return;
-
-	if (color of node is not equal to target-color)
-		return;
-
-	node.setColor(replacement-color);
-	Set Q empty;
-	Q.addEnd(node);
-
-	while (Q is not empty) {
-		n = Q.removeFirst();
-
-		if (the color of the node to the west of n is target-color)
-			set the color of that node to replacement-color and add that node to the end of Q;
-
-		if (the color of the node to the east of n is target-color)
-			set the color of that node to replacement-color and add that node to the end of Q;
-
-		if (the color of the node to the north of n is target-color)
-			set the color of that node to replacement-color and add that node to the end of Q;
-
-		if (the color of the node to the south of n is target-color)
-			set the color of that node to replacement-color and add that node to the end of Q;
-	}
-}
-*/

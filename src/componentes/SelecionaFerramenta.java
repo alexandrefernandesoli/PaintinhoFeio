@@ -10,6 +10,7 @@ public class SelecionaFerramenta{
     private DesenhaCirculo circulo = new DesenhaCirculo();
     private EscreveTexto texto = new EscreveTexto();
     private DesenhaReta reta = new DesenhaReta();
+    private PreenchimentoBalde balde = new PreenchimentoBalde();
 
 
     public void clickDoMouse(GraphicsContext areaDePintura, SeguraElementos elementos, MouseEvent evento) {
@@ -27,6 +28,8 @@ public class SelecionaFerramenta{
             texto.clickDoMouse(elementos.getTexto(), areaDePintura, evento);
         } else if (elementos.getFerramenta().getUserData() == "reta") {
             reta.clickDoMouse(areaDePintura, evento);
+        } else if (elementos.getFerramenta().getUserData() == "balde") {
+            balde.clickDoMouse(areaDePintura, evento);
         }
     }
 
@@ -43,6 +46,8 @@ public class SelecionaFerramenta{
             circulo.arrastoDoMouse(areaDePintura, evento);
         } else if (elementos.getFerramenta().getUserData() == "reta") {
             reta.arrastoDoMouse(areaDePintura, evento);
+        } else if (elementos.getFerramenta().getUserData() == "balde") {
+            balde.arrastoDoMouse(areaDePintura, evento);
         }
     }
 
@@ -55,9 +60,10 @@ public class SelecionaFerramenta{
             circulo.soltarClickMouse(areaDePintura, evento);
         } else if (elementos.getFerramenta().getUserData() == "texto") {
             texto.soltarClickMouse(elementos.getTexto(), areaDePintura, evento);
-
         } else if (elementos.getFerramenta().getUserData() == "reta") {
             reta.soltarClickMouse(areaDePintura, evento);
+        } else if (elementos.getFerramenta().getUserData() == "balde") {
+            balde.soltarClickMouse(areaDePintura, evento);
         }
     }
 }
