@@ -1,16 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package componentes;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 
-/**
- * @author Felipe Hiroshi
- */
 public class DesenhaReta implements Ferramentas {
     private double x;
     private double y;

@@ -8,3 +8,5 @@ manifest.mf
 \.idea/
 out/
 PaintinhoFeio\.iml
+
+*.uml

@@ -8,9 +8,6 @@ package componentes;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 
-/**
- * @author Felipe Hiroshi
- */
 abstract class Forma implements Ferramentas {
     double coordenadaX;
     double coordenadaY;
