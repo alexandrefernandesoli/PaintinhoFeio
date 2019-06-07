@@ -22,10 +22,10 @@ public class PreenchimentoBalde implements Ferramentas {
         WritableImage capturaDoCanvas = canvas.snapshot(null, 
                 new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight()));
 
-        Color corAntiga = (Color) gc.getFill();
+        Color corNova = (Color) gc.getFill();
         Point ponto = new Point((int) event.getX(), (int) event.getY());
 
-        Task<Void> task = new FloodFill(capturaDoCanvas, corAntiga, ponto);
+        Task<Void> task = new FloodFill(capturaDoCanvas, corNova, ponto);
         task.setOnSucceeded(successEvent -> gc.drawImage(capturaDoCanvas, 0, 0));
         new Thread(task).start();
     }
@@ -44,11 +44,11 @@ public class PreenchimentoBalde implements Ferramentas {
 
         private final WritableImage canvasSnapshot;
         private final Point ponto;
-        private final Color corAntiga;
+        private final Color corNova;
 
-        private FloodFill(WritableImage capturaDoCanvas, Color corAntiga, Point ponto) {
+        private FloodFill(WritableImage capturaDoCanvas, Color corNova, Point ponto) {
             this.canvasSnapshot = capturaDoCanvas;
-            this.corAntiga = corAntiga;
+            this.corNova = corNova;
             this.ponto = ponto;
         }
 
@@ -56,9 +56,9 @@ public class PreenchimentoBalde implements Ferramentas {
         protected Void call() throws Exception {
             PixelReader pixelReader = canvasSnapshot.getPixelReader();
             PixelWriter pixelWriter = canvasSnapshot.getPixelWriter();
-            Color corNova = pixelReader.getColor((int) ponto.getX(), (int) ponto.getY());
+            Color corAntiga = pixelReader.getColor((int) ponto.getX(), (int) ponto.getY());
 
-            if (corNova.equals(corAntiga) /*|| !corNova.equals(corDoPixel)*/)
+            if (corAntiga.equals(corNova) /*|| !corNova.equals(corDoPixel)*/)
                 return null;
 
             Queue<Point> fila = new LinkedList<>();
@@ -71,8 +71,8 @@ public class PreenchimentoBalde implements Ferramentas {
                         pixel.getY() < 0.0f || pixel.getY() >= canvasSnapshot.getHeight())) {
 
                     Color corDoPixel = pixelReader.getColor((int) pixel.getX(), (int) pixel.getY());
-                    if (corDoPixel.equals(corNova))
-                        continue;
+//                    if (corDoPixel.equals(corNova))
+//                        continue;
 
                     final int[] deslocamentos = {-1, 1};
                     for (int i : deslocamentos) {
