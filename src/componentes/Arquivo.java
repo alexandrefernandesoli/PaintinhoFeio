@@ -101,16 +101,17 @@ public class Arquivo {
                 }
             });
         }
-        if (arquivoAtual != null)
-            trocaNomeStage();
     }
 
     public static void abrirArquivoRealmente(File arquivo, GraphicsContext areaDePintura) throws FileNotFoundException {
+        arquivoAtual = arquivo;
         Image imagem = new Image(new FileInputStream(arquivo));
 
         areaDePintura.getCanvas().setWidth(imagem.getWidth());
         areaDePintura.getCanvas().setHeight(imagem.getHeight());
         areaDePintura.drawImage(imagem, 0, 0);
+
+        trocaNomeStage();
     }
 
     public static void criaArquivosRecentes() throws IOException {
@@ -128,8 +129,10 @@ public class Arquivo {
             BufferedReader bfLer = new BufferedReader(ler);
             String linha = bfLer.readLine();
             while (linha != null) {
-                arquivosRecentes.add(new File(linha));
-                System.out.println(linha);
+                File arquivo = new File(linha);
+                if(arquivo.exists()){
+                    arquivosRecentes.add(arquivo);
+                }
                 linha = bfLer.readLine();
             }
         }
